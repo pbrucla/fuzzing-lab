@@ -16,7 +16,9 @@ This exercise is based on [Fuzzing101 Exercise 1](https://github.com/antonio-mor
 
 We will be using [Docker](https://www.docker.com) to provide a Linux environment for those of you running inferior operating systems.
 If you don't have Docker installed, follow the [installation instructions](https://docs.docker.com/get-docker/) on the Docker website.
-On Windows, you can also install Docker inside WSL.
+On Windows, use the WSL backend instead of the Hyper-V backend.
+You can also install Docker Engine inside WSL without Docker Desktop.
+Do all of your work inside WSL because accessing files in the Windows file system outside WSL from within WSL is extremely slow.
 If you have Linux already, you can try fuzzing without Docker but you may have to build and install Honggfuzz manually.
 
 ### Building the image
