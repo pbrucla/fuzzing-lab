@@ -62,3 +62,68 @@ The `-ai` flags are similar to the `-it` flags we used when creating the contain
 You can list the containers on your system with `docker ps -a`, where the `-a` flag makes Docker show all containers, not just ones that are running.
 To delete a container, run `docker rm <container>`.
 **This will permanently delete the container without asking for confirmation.**
+
+## Fuzzing Xpdf
+
+### Instrumentation
+
+To fuzz effectively, the fuzzer needs a way to monitor the execution of the target program so that it knows which inputs generate interesting new behavior.
+We will compile the target with a special compiler which inserts instrumentation code that allows Honggfuzz to track code coverage.
+Honggfuzz can also monitor the target using hardware features on some CPUs or the QEMU emulator.
+
+Run `mkdir -p work/xpdf` to create a directory for fuzzing Xpdf.
+The `-p` flag tells `mkdir` to create the `work` directory if it doesn't already exist.
+Go into the directory with `cd work/xpdf`.
+Download the Xpdf source code using the `curl` utiliy by running `curl -LO 'https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz'`.
+The `-L` flag tells curl to follow redirects, and the `-O` flag makes curl automatically determine the output file name.
+The downloaded file is a tar archive compressed using gzip.
+To extract it, run `tar -xvzf xpdf-3.02.tar.gz`.
+Here, `x` means extract, `v` means verbose (print out file names while extracting), `z` means the file is compressed with gzip, and `f` means read from the file named in the next argument instead of stdin.
+`cd` into the resulting `xpdf-3.02` directory.
+
+Now we will build Xpdf using the GNU build system.
+First, run `CC=hfuzz-clang CXX=hfuzz-clang++ ./configure --prefix=/fuzz/work/xpdf/install` to generate a Makefile containing the commands that need to be executed in order to build Xpdf.
+`CC=hfuzz-clang CXX=hfuzz-clang++` sets the C and C++ compilers to the Honggfuzz compilers which will instrument the program.
+The `--prefix` option sets the directory where Xpdf will be installed after it is built.
+Next, run `make -j <num_cores>` where `<num_cores>` is the number of CPU cores on your computer, which you can determine by running the `nproc` command.
+This will compile Xpdf by executing the commands in the Makefile.
+The `-j` option tells Make how many jobs to run in parallel.
+Finally, run `make install`.
+This will install Xpdf into the directory we specified earlier.
+Go back to our `xpdf `directory with `cd ..`.
+If you run `ls install/bin` now you should see several executables including `pdftotext`, which is the one that we will fuzz.
+
+### Initial corpus
+
+To help Honggfuzz find interesting inputs, we will give it a few small examples of valid PDF files.
+Create a directory to hold these files and download some sample PDFs:
+
+```sh
+mkdir pdf_examples
+cd pdf_examples
+curl -LO 'https://github.com/mozilla/pdf.js-sample-files/raw/master/helloworld.pdf'
+curl -LO 'http://www.africau.edu/images/default/sample.pdf'
+curl -LO 'https://www.melbpc.org.au/wp-content/uploads/2017/10/small-example-pdf-file.pdf'
+cd ..
+```
+
+You can try running `pdftotext` on one of these files like this: `install/bin/pdftotext pdf_examples/helloworld.pdf -`.
+`pdftotext` converts PDF files to plain text.
+The first argument is the input PDF file, and the second argument is the output text file (`-` means output to stdout).
+It should output `Hello, world!` followed by a few blank lines.
+
+### Fuzzing
+
+Here's the fun part!
+To start fuzzing, run `honggfuzz -i pdf_examples -o corpus -- install/bin/pdftotext ___FILE___ /dev/null`.
+We give Honggfuzz the `pdf_examples` directory as the initial input corpus and tell it to store new interesting inputs in the `corpus` directory.
+After the `--`, we specify the program to be fuzzed along with its arguments.
+`___FILE___` is a placeholder which Honggfuzz will replace with the name of the input file, and we make the program output to `/dev/null`, which is a special file that discards anything written to it.
+
+You should now see a fancy status panel.
+Depending on your luck, it may take anywhere from a few seconds to tens of minutes for Honggfuzz to find a crash.
+Once Honggfuzz finds a crash, you can stop the fuzzing with CTRL-C.
+You can also use the `--exit_upon_crash` flag to have Honggfuzz automatically stop when it finds a crash.
+You should see the corpus size increase and lines should keep appearing in the log.
+The "Cov Update" value indicates how long it has been since the fuzzer found a new interesting input.
+If the fuzzer isn't finding new inputs or the speed is below 100, then something is probably wrong.
