@@ -17,8 +17,6 @@ This exercise is based on [Fuzzing101 Exercise 1](https://github.com/antonio-mor
 We will be using [Docker](https://www.docker.com) to provide a Linux environment for those of you running inferior operating systems.
 If you don't have Docker installed, follow the [installation instructions](https://docs.docker.com/get-docker/) on the Docker website.
 On Windows, use the WSL backend instead of the Hyper-V backend.
-You can also install Docker Engine inside WSL without Docker Desktop.
-Do all of your work inside WSL because accessing files in the Windows file system outside WSL from within WSL is extremely slow.
 If you have Linux already, you can try fuzzing without Docker but you may have to build and install Honggfuzz manually.
 
 ### Building the image
@@ -71,10 +69,7 @@ To fuzz effectively, the fuzzer needs a way to monitor the execution of the targ
 We will compile the target with a special compiler which inserts instrumentation code that allows Honggfuzz to track code coverage.
 Honggfuzz can also monitor the target using hardware features on some CPUs or the QEMU emulator.
 
-Run `mkdir -p work/xpdf` to create a directory for fuzzing Xpdf.
-The `-p` flag tells `mkdir` to create the `work` directory if it doesn't already exist.
-Go into the directory with `cd work/xpdf`.
-Download the Xpdf source code using the `curl` utiliy by running `curl -LO 'https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz'`.
+Inside the Docker container, download the Xpdf source code using the `curl` utiliy by running `curl -LO 'https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz'`.
 The `-L` flag tells curl to follow redirects, and the `-O` flag makes curl automatically determine the output file name.
 The downloaded file is a tar archive compressed using gzip.
 To extract it, run `tar -xvzf xpdf-3.02.tar.gz`.
@@ -82,7 +77,7 @@ Here, `x` means extract, `v` means verbose (print out file names while extractin
 `cd` into the resulting `xpdf-3.02` directory.
 
 Now we will build Xpdf using the GNU build system.
-First, run `CC=hfuzz-clang CXX=hfuzz-clang++ ./configure --prefix=/fuzz/work/xpdf/install` to generate a Makefile containing the commands that need to be executed in order to build Xpdf.
+First, run `CC=hfuzz-clang CXX=hfuzz-clang++ ./configure --prefix=/fuzz/install` to generate a Makefile containing the commands that need to be executed in order to build Xpdf.
 `CC=hfuzz-clang CXX=hfuzz-clang++` sets the C and C++ compilers to the Honggfuzz compilers which will instrument the program.
 The `--prefix` option sets the directory where Xpdf will be installed after it is built.
 Next, run `make -j <num_cores>` where `<num_cores>` is the number of CPU cores on your computer, which you can determine by running the `nproc` command.
@@ -90,7 +85,7 @@ This will compile Xpdf by executing the commands in the Makefile.
 The `-j` option tells Make how many jobs to run in parallel.
 Finally, run `make install`.
 This will install Xpdf into the directory we specified earlier.
-Go back to our `xpdf `directory with `cd ..`.
+Go back to our `fuzz `directory with `cd ..`.
 If you run `ls install/bin` now you should see several executables including `pdftotext`, which is the one that we will fuzz.
 
 ### Initial corpus
@@ -112,18 +107,38 @@ You can try running `pdftotext` on one of these files like this: `install/bin/pd
 The first argument is the input PDF file, and the second argument is the output text file (`-` means output to stdout).
 It should output `Hello, world!` followed by a few blank lines.
 
+### Dictionary
+
+Another way that we can help Honggfuzz is use a dictionary, which is a list of common byte sequences for the file format that we're fuzzing.
+Honggfuzz will try inserting these sequences into the input data and it will have a higher change of creating partially-valid files that trigger new behavior in our target.
+We'll use a PDF dictionary from AFL++, another popular fuzzer.
+Download it with this command:
+
+```sh
+curl -LO 'https://github.com/AFLplusplus/AFLplusplus/raw/stable/dictionaries/pdf.dict'
+```
+
 ### Fuzzing
 
 Here's the fun part!
-To start fuzzing, run `honggfuzz -i pdf_examples -o corpus -- install/bin/pdftotext ___FILE___ /dev/null`.
+To start fuzzing, run `honggfuzz -i pdf_examples -o corpus -w pdf.dict -- install/bin/pdftotext ___FILE___ /dev/null`.
 We give Honggfuzz the `pdf_examples` directory as the initial input corpus and tell it to store new interesting inputs in the `corpus` directory.
+We also provide the dictionary with `-w pdf.dict`.
 After the `--`, we specify the program to be fuzzed along with its arguments.
 `___FILE___` is a placeholder which Honggfuzz will replace with the name of the input file, and we make the program output to `/dev/null`, which is a special file that discards anything written to it.
 
 You should now see a fancy status panel.
-Depending on your luck, it may take anywhere from a few seconds to tens of minutes for Honggfuzz to find a crash.
+Depending on your luck and how powerful your computer is, it may take anywhere from a few seconds to tens of minutes for Honggfuzz to find a crash.
 Once Honggfuzz finds a crash, you can stop the fuzzing with CTRL-C.
 You can also use the `--exit_upon_crash` flag to have Honggfuzz automatically stop when it finds a crash.
 You should see the corpus size increase and lines should keep appearing in the log.
 The "Cov Update" value indicates how long it has been since the fuzzer found a new interesting input.
 If the fuzzer isn't finding new inputs or the speed is below 100, then something is probably wrong.
+
+Now run `ls` and you should see a file named something like `SIGSEGV.PC.57605a.STACK.1976259487.CODE.1.ADDR.7fff4d888ff8.INSTR.call___0xffffffffffe904c6.fuzz`.
+This contains the input that caused the crash.
+There should also be a file named `HONGGFUZZ.REPORT.TXT`, and you can print it out by running `cat HONGGFUZZ.REPORT.TXT`.
+This file contains some details of the crash, including the backtrace which is the list of function calls that lead to the crash.
+You'll see a few lines repeating over and over again because the crash was due to infinite recursion.
+If you were investigating a new bug that you just found, the next step would be to figure out the root cause using tools like GDB.
+That requires a lot more knowledge that we don't have time to cover and being familiar with the code that we're fuzzing, so we will stop here.
