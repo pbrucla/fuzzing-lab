@@ -10,6 +10,9 @@ In later weeks we might not tell you the exact commands that you should run and 
 
 This exercise is based on [Fuzzing101 Exercise 1](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%201).
 
+> [!NOTE]
+> There will be many friendly questions in this format that will help you learn more about fuzzing and computers in general. Please try to think about these questions as you try to re-discover the vulnerability in Xpdf. Being able to think about open-ended questions is a skill that will help you in software and in CS 35L (scary oooooooooo).
+
 ## Docker
 
 ### Installation
@@ -18,6 +21,9 @@ We will be using [Docker](https://www.docker.com) to provide a Linux environment
 If you don't have Docker installed, follow the [installation instructions](https://docs.docker.com/get-docker/) on the Docker website.
 On Windows, use the WSL backend instead of the Hyper-V backend.
 If you have Linux already, you can try fuzzing without Docker but you may have to build and install Honggfuzz manually.
+
+> [!NOTE]
+> Docker has a clear advantage that we can keep the same environment across everyone's computer. However, what could be some downsides of using Docker?
 
 ### Building the image
 
@@ -49,6 +55,9 @@ This will build the image following the Dockerfile and may take a few minutes.
 The `-t fuzz` option assigns the name `fuzz` to the resulting image, which will be stored inside a directory managed by Docker.
 You can list the Docker images that you have on your system with `docker images` and delete them with `docker rmi <image>` where `<image>` is the image name or ID.
 
+> [!NOTE]
+> Remember how we need the period at the end for `docker build -t fuzz .`, why do we need the period at the end?
+
 ### Running a container
 
 Run `docker run -it --name xpdf fuzz` to create a new Docker container using our `fuzz` image. `-it` is short for `-i -t`, which are two flags that set up input and output so that we can use the container interactively.
@@ -60,6 +69,9 @@ The `-ai` flags are similar to the `-it` flags we used when creating the contain
 You can list the containers on your system with `docker ps -a`, where the `-a` flag makes Docker show all containers, not just ones that are running.
 To delete a container, run `docker rm <container>`.
 **This will permanently delete the container without asking for confirmation.**
+
+> [!NOTE]
+> What docker command do we use to re-run the container later to avoid losing our progress?
 
 ## Fuzzing Xpdf
 
@@ -88,6 +100,9 @@ This will install Xpdf into the directory we specified earlier.
 Go back to our `fuzz `directory with `cd ..`.
 If you run `ls install/bin` now you should see several executables including `pdftotext`, which is the one that we will fuzz.
 
+> [!NOTE]
+> What would happen if we removed `CC=hfuzz-clang CXX=hfuzz-clang++` from the commands? Would the fuzzing work? Would it be more efficient?
+
 ### Initial corpus
 
 To help Honggfuzz find interesting inputs, we will give it a few small examples of valid PDF files.
@@ -107,6 +122,9 @@ You can try running `pdftotext` on one of these files like this: `install/bin/pd
 The first argument is the input PDF file, and the second argument is the output text file (`-` means output to stdout).
 It should output `Hello, world!` followed by a few blank lines.
 
+> [!NOTE]
+> What initial corpus size is ideal? How big or small should the starting corpus be and how would this affect fuzzing outcomes?
+
 ### Dictionary
 
 Another way that we can help Honggfuzz is use a dictionary, which is a list of common byte sequences for the file format that we're fuzzing.
@@ -119,6 +137,9 @@ curl -LO 'https://github.com/AFLplusplus/AFLplusplus/raw/stable/dictionaries/pdf
 ```
 
 ### Fuzzing
+
+> [!IMPORTANT]
+> Before starting fuzzing, I would recommend plugging in your laptop. Fuzzing is very intense and most laptops can draw more power when they are plugged in. The more power your computer draws, the faster your computer will be. The faster your computer, the faster your fuzzer will find interesting inputs!
 
 Here's the fun part!
 To start fuzzing, run `honggfuzz -i pdf_examples -o corpus -w pdf.dict -- install/bin/pdftotext ___FILE___ /dev/null`.
@@ -135,6 +156,9 @@ You should see the corpus size increase and lines should keep appearing in the l
 The "Cov Update" value indicates how long it has been since the fuzzer found a new interesting input.
 If the fuzzer isn't finding new inputs or the speed is below 100, then something is probably wrong.
 
+> [!NOTE]
+> How long did it take your computer to find the crash? How long did it take the people around you? Compare how long it took and try to come up with an explanation.
+
 Now run `ls` and you should see a file named something like `SIGSEGV.PC.57605a.STACK.1976259487.CODE.1.ADDR.7fff4d888ff8.INSTR.call___0xffffffffffe904c6.fuzz`.
 This contains the input that caused the crash.
 There should also be a file named `HONGGFUZZ.REPORT.TXT`, and you can print it out by running `cat HONGGFUZZ.REPORT.TXT`.
@@ -142,3 +166,6 @@ This file contains some details of the crash, including the backtrace which is t
 You'll see a few lines repeating over and over again because the crash was due to infinite recursion.
 If you were investigating a new bug that you just found, the next step would be to figure out the root cause using tools like GDB.
 That requires a lot more knowledge that we don't have time to cover and being familiar with the code that we're fuzzing, so we will stop here.
+
+> [!NOTE]
+> That file name `SIGSEGV.PC.57605a.STACK.1976259487.CODE.1.ADDR.7fff4d888ff8.INSTR.call___0xffffffffffe904c6.fuzz` is very long and has many words. What do each of those words/numbers mean and refer to? Can you get any information on the crash from the name?
