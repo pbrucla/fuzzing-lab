@@ -34,6 +34,6 @@ The instructions will synchronize the contents of this repo you have checked out
 
 It is recommended to make a folder `work` where you do all your `curl`ing and `tar`ing so that you can always re-visit those parts without having to re-download files.
 
-# License
+## License
 
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
