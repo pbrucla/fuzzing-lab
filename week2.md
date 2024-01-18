@@ -60,7 +60,7 @@ You can list the Docker images that you have on your system with `docker images`
 
 ### Running a container
 
-Run `docker run -it --name xpdf fuzz` to create a new Docker container using our `fuzz` image. `-it` is short for `-i -t`, which are two flags that set up input and output so that we can use the container interactively.
+Run `docker run -it --name fuzz_xpdf fuzz` to create a new Docker container using our `fuzz` image. `-it` is short for `-i -t`, which are two flags that set up input and output so that we can use the container interactively.
 The `--name fuzz_xpdf` option assigns the name `fuzz_xpdf` to the container so that we can easily reference it later.
 You should now have a Linux shell inside the container, similar to what you have on SEASnet.
 You can exit the container by typing the `exit` command or pressing CTRL-D on a new line.
