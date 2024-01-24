@@ -162,7 +162,8 @@ You should now see a fancy status panel.
 Depending on your luck and how powerful your computer is, it may take anywhere from a few seconds to tens of minutes for Honggfuzz to find a crash.
 Once Honggfuzz finds a crash, you can stop the fuzzing with CTRL-C.
 You can also use the `--exit_upon_crash` flag to have Honggfuzz automatically stop when it finds a crash.
-You should see the corpus size increase and lines should keep appearing in the log.
+If you use this flag, you have to put it before the `--`, otherwise Honggfuzz will think that the flag is for the target program.
+While Honggfuzz is running, you should see the corpus size increase and lines should keep appearing in the log.
 The "Cov Update" value indicates how long it has been since the fuzzer found a new interesting input.
 If the fuzzer isn't finding new inputs or the speed is below 100, then something is probably wrong.
 
