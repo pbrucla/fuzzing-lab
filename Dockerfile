@@ -1,5 +1,20 @@
 FROM fedora
 
-RUN dnf upgrade -y && dnf install -y honggfuzz gcc gcc-c++ libasan libubsan make cmake autoconf git gdb man unzip lcov
+RUN dnf upgrade -y && \
+	dnf install -y \
+		autoconf \
+		cmake \
+		gcc \
+		gcc-c++ \
+		gdb \
+		git \
+		honggfuzz \
+		lcov \
+		libasan \
+		libubsan \
+		make \
+		man \
+		unzip \
+	;
 
 WORKDIR /fuzz
