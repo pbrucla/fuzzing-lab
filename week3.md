@@ -47,7 +47,7 @@ Remember to use the Honggfuzz compiler and set the install prefix.
 Go back to the `/fuzz` directory.
 Download the exif source code from <https://github.com/libexif/exif/archive/refs/tags/exif-0_6_15-release.tar.gz> and extract the archive, then build and install exif.
 When running the `configure` script, add `PKG_CONFIG_PATH=/fuzz/install/lib/pkgconfig` to the end.
-This option helps the build system find the `libexif` libary that we just installed.
+This option helps the build system find the libexif libary that we just installed.
 
 Return to the `/fuzz` directory once again.
 If you try running the `exif` program that you just built, you should see a help message.
