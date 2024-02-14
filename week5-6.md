@@ -125,3 +125,13 @@ This will start a new shell which you can then detach from by pressing `C-b d` (
 After detaching from the tmux session, you can disconnect from the server and the fuzzer will keep running.
 To reattach to the tmux session later, run `tmux attach`.
 Note that tmux will slightly change scrolling and text selection.
+
+## Fuzzing resources
+
+Here are some online resources that may be helpful:
+
+ - [Fuzzing101](https://github.com/antonio-morales/Fuzzing101): Hands-on fuzzing tutorial which some of our exercises are based on.
+ - [Google fuzzing repo](https://github.com/google/fuzzing): Tutorial for libFuzzer, some general tips, and dictionaries for common formats.
+ - [Trail of Bits Testing Handbook](https://appsec.guide/docs/fuzzing/): Good introduction to fuzzing.
+ - [AFL++ docs](https://aflplus.plus/): Documentation for another popular fuzzer.
+ - [The Fuzzing Book](https://www.fuzzingbook.org/): Huge, extremely in-depth fuzzing textbook.
