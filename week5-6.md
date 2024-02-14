@@ -114,7 +114,7 @@ They're in `~alex/yaml-tests` on the server if you want to use them.
 
 Using a dictionary might help the fuzzer increase coverage.
 You can try searching for a fuzzing dictionary online.
-Here's a [YAML dictionary](https://github.com/google/oss-fuzz/blob/master/projects/libyaml/yaml.dict) from oss-fuzz.
+Here's a [YAML dictionary](https://github.com/google/fuzzing/blob/master/dictionaries/yaml.dict) from [Google's fuzzing repo](https://github.com/google/fuzzing).
 
 ### Leaving the fuzzer running
 
