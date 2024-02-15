@@ -59,7 +59,6 @@ We have compiled a list of potential targets for you to fuzz:
  - [xml.c](https://github.com/ooxi/xml.c)
  - [tomlc99](https://github.com/cktan/tomlc99)
  - [Ctoml](https://github.com/evilncrazy/ctoml)
- - [toml11](https://github.com/ToruNiina/toml11)
  - [libwbxml](https://github.com/libwbxml/libwbxml)
  - [NanoSVG](https://github.com/memononen/nanosvg)
  - [TinyXML-2](https://github.com/leethomason/tinyxml2)
