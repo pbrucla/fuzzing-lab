@@ -15,8 +15,7 @@ If you have any questions, feel free to ask one of the officers running the lab.
 
 > [!NOTE]
 > There will be many friendly questions in this format that will help you learn more about fuzzing and computers in general.
-> Please try to think about these questions as you try to re-discover the vulnerability in Xpdf.
-> Being able to think about open-ended questions is a skill that will help you in software!
+> Please try to think about these questions as you work on the activity, and feel free to ask us for help if you don't know the answer.
 
 ## Setup
 
