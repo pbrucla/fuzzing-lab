@@ -1,81 +1,21 @@
-# Week 2: Basic Honggfuzz Usage
+# Week 2: Intro to Fuzzing
 
-[Honggfuzz](https://honggfuzz.dev) is a easy-to-use fuzzer developed by Google which has found [many vulnerabilities](https://github.com/google/honggfuzz#trophies).
-We will be using it to rediscover an infinite recursion denial-of-service vulnerability in [Xpdf](https://www.xpdfreader.com).
+Fuzzing is a software testing technique that involves providing invalid, unexpected, or random data as inputs to a computer program. This quarter, we will be delving into the world of fuzzing and learning how to use it to find bugs in software. We will be learning how to use [Honggfuzz](https://honggfuzz.dev), a easy-to-use, security-oriented fuzzer developed by Google which has found [many vulnerabilities](https://github.com/google/honggfuzz#trophies).
 
-**We recommend that you type out the commands in this exercise (except for URLs) instead of copying and pasting them.
-This will help you remember things.**
-You should try to understand what each command line argument does rather than memorize the whole command.
-In later weeks we might not tell you the exact commands that you should run and you'll have to figure them out yourself.
+This week, we will be using Honggfuzz to rediscover an **infinite recursion denial-of-service vulnerability** in [Xpdf](https://www.xpdfreader.com). This exercise is based on [Fuzzing101 Exercise 1](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%201).
 
-This exercise is based on [Fuzzing101 Exercise 1](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%201).
+**The best way to learn is by doing!** We recommend that you type out the commands in this exercise (except for URLs) instead of copying and pasting them.
+This will help you remember things.
+You should try to understand what each command line argument does rather than memorize the whole command. We have left some guiding questions to help you think about what each command does. If you have any questions, feel free to ask one of the officers/members running the lab.
 
 > [!NOTE]
 > There will be many friendly questions in this format that will help you learn more about fuzzing and computers in general.
 > Please try to think about these questions as you try to re-discover the vulnerability in Xpdf.
-> Being able to think about open-ended questions is a skill that will help you in software and in CS 35L (scary oooooooooo).
+> Being able to think about open-ended questions is a skill that will help you in software!
 
-## Docker
+## Setup
 
-### Installation
-
-We will be using [Docker](https://www.docker.com) to provide a Linux environment for those of you running inferior operating systems.
-If you don't have Docker installed, follow the [installation instructions](https://docs.docker.com/get-docker/) on the Docker website.
-On Windows, use the WSL backend instead of the Hyper-V backend.
-If you have Linux already, you can try fuzzing without Docker but you may have to build and install Honggfuzz manually.
-
-> [!NOTE]
-> Docker has a clear advantage that we can keep the same environment across everyone's computer.
-> However, what could be some downsides of using Docker?
-
-### Building the image
-
-Once you have Docker installed, clone this repository (`git clone 'https://github.com/pbrucla/fuzzing-lab.git'` if you have Git) or place our [Dockerfile](https://github.com/pbrucla/fuzzing-lab/blob/main/Dockerfile) inside a new empty directory.
-Make sure the file name is `Dockerfile` with the same capitalization and no extension.
-Note that Windows may hide file name extensions.
-This file tells Docker how to build a Docker *image*, which is a template used to spawn Docker *containers*.
-Each container is an isolated Linux environment with its own file system.
-
-The Dockerfile looks like this:
-
-```dockerfile
-FROM fedora
-
-RUN dnf upgrade -y && dnf install -y honggfuzz gcc gcc-c++ libasan libubsan make cmake autoconf git
-
-WORKDIR /fuzz
-```
-
-The first line tells Docker to start from an image containing [Fedora Linux](https://fedoraproject.org).
-We're using the Fedora Linux distribution because I like it, and it has Honggfuzz packaged.
-The next command updates the packages in the image, then installs Honggfuzz and some other tools that we'll need.
-The `WORKDIR` command sets the working directory to `/fuzz`.
-
-Inside the directory containing the Dockerfile, run `docker build -t fuzz .`.
-Note the period at the end of the command.
-You might have to prefix all Docker commands with `sudo` like `sudo docker build -t fuzz .` depending on how your Docker is set up.
-This will build the image following the Dockerfile and may take a few minutes.
-The `-t fuzz` option assigns the name `fuzz` to the resulting image, which will be stored inside a directory managed by Docker.
-You can list the Docker images that you have on your system with `docker images` and delete them with `docker rmi <image>` where `<image>` is the image name or ID.
-
-> [!NOTE]
-> Remember how we need the period at the end for `docker build -t fuzz .`.
-> Why do we need the period at the end?
-
-### Running a container
-
-Run `docker run -it --name fuzz_xpdf fuzz` to create a new Docker container using our `fuzz` image. `-it` is short for `-i -t`, which are two flags that set up input and output so that we can use the container interactively.
-The `--name fuzz_xpdf` option assigns the name `fuzz_xpdf` to the container so that we can easily reference it later.
-You should now have a Linux shell inside the container, similar to what you have on SEASnet.
-You can exit the container by typing the `exit` command or pressing CTRL-D on a new line.
-To reenter the container later, run `docker start -ai fuzz_xpdf`.
-The `-ai` flags are similar to the `-it` flags we used when creating the container and allow us to run the container interactively.
-You can list the containers on your system with `docker ps -a`, where the `-a` flag makes Docker show all containers, not just ones that are running.
-To delete a container, run `docker rm <container>`.
-**This will permanently delete the container without asking for confirmation.**
-
-> [!NOTE]
-> What docker command do we use to re-run the container later to avoid losing our progress?
+All of the exercises and tooling needed to complete the labs are included on a Fuzzing Server we have set up for this lab. You will need to SSH into the server to complete the exercises. Follow the instructions to SSH into the server.
 
 ## Fuzzing Xpdf
 
@@ -85,51 +25,91 @@ To fuzz effectively, the fuzzer needs a way to monitor the execution of the targ
 We will compile the target with a special compiler which inserts instrumentation code that allows Honggfuzz to track code coverage.
 Honggfuzz can also monitor the target using hardware features on some CPUs or the QEMU emulator.
 
-Inside the Docker container, download the Xpdf source code using the `curl` utiliy by running `curl -LO 'https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz'`.
-The `-L` flag tells curl to follow redirects, and the `-O` flag makes curl automatically determine the output file name.
-The downloaded file is a tar archive compressed using gzip.
-To extract it, run `tar -xvzf xpdf-3.02.tar.gz`.
-Here, `x` means extract, `v` means verbose (print out file names while extracting), `z` means the file is compressed with gzip, and `f` means read from the file named in the next argument instead of stdin.
-`cd` into the resulting `xpdf-3.02` directory.
+After connecting to the server, download the Xpdf source code using the `curl` utiliy by running the following. The downloaded file is a tar archive compressed using gzip which you can extract using `tar`.
 
-Now we will build Xpdf using the GNU build system.
-First, run `CC=hfuzz-clang CXX=hfuzz-clang++ ./configure --prefix=/fuzz/install` to generate a Makefile containing the commands that need to be executed in order to build Xpdf.
+```shell
+curl -LO 'https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz'
+tar -xvzf xpdf-3.02.tar.gz
+```
+
+The `-L` flag tells curl to follow redirects, and the `-O` flag makes curl automatically determine the output file name.
+For the `tar` command, `x` means extract, `v` means verbose (print out file names while extracting), `z` means the file is compressed with gzip, and `f` means read from the file named in the next argument instead of stdin.
+
+Change your directory into the resulting `xpdf-3.02` directory.
+
+```shell
+cd xpdf-3.02/
+```
+
+Now we will build Xpdf using the GNU build system. First, generate a Makefile containing the commands that need to be executed in order to build Xpdf. This is done by running the `configure` script shown below.
+
+```shell
+CC=hfuzz-clang CXX=hfuzz-clang++ ./configure --prefix=/fuzz/install
+```
+
 `CC=hfuzz-clang CXX=hfuzz-clang++` sets the C and C++ compilers to the Honggfuzz compilers which will instrument the program.
-The `--prefix` option sets the directory where Xpdf will be installed after it is built.
-Next, run `make -j <num_cores>` where `<num_cores>` is the number of CPU cores on your computer, which you can determine by running the `nproc` command.
+The `--prefix` option sets the directory where Xpdf will be installed after it is built. Next, run `make -j <num_cores>` where `<num_cores>` is the number of CPU cores on your computer, which you can determine by running the `nproc` command.
 This will compile Xpdf by executing the commands in the Makefile.
-The `-j` option tells Make how many jobs to run in parallel.
-Finally, run `make install`.
-This will install Xpdf into the directory we specified earlier.
+
+```make
+make -j $(nproc)
+make install
+```
+
+
+The `-j` option tells Make how many jobs to run in parallel. `make install` installs the compiled program (Xpdf) into the directory we specified earlier.
 Go back to our `fuzz `directory with `cd ..`.
 If you run `ls install/bin` now you should see several executables including `pdftotext`, which is the one that we will fuzz.
 
 > [!NOTE]
 > What would happen if we removed `CC=hfuzz-clang CXX=hfuzz-clang++` from the commands?
+
+> [!NOTE]
 > Would the fuzzing work?
+
+> [!NOTE]
 > Would it be more efficient?
 
-### Initial corpus
+### Building a Seed Corpus
 
-To help Honggfuzz find interesting inputs, we will give it a few small examples of valid PDF files.
-Create a directory to hold these files and download some sample PDFs:
+To help Honggfuzz find interesting inputs, we will give it a few small examples of valid PDF files as part of the **seed corpus**.
+Create a directory to hold these files and download some sample PDFs!
 
-```sh
+```shell
 mkdir pdf_examples
-cd pdf_examples
+cd pdf_examples/
+```
+
+Your task in this part is to try and **build a seed corpus**. In this case, since Xpdf takes PDFs as input, we will download some sample PDFs to use as the seed corpus. You can download the sample PDFs using the `curl` command shown below.
+
+```
 curl -LO 'https://github.com/mozilla/pdf.js-sample-files/raw/master/helloworld.pdf'
-curl -LO 'http://www.africau.edu/images/default/sample.pdf'
-curl -LO 'https://www.melbpc.org.au/wp-content/uploads/2017/10/small-example-pdf-file.pdf'
 cd ..
 ```
 
-You can try running `pdftotext` on one of these files like this: `install/bin/pdftotext pdf_examples/helloworld.pdf -`.
-`pdftotext` converts PDF files to plain text.
+> [!NOTE]
+> Find some other PDF files (using Google or some other search engine) and add them to the seed corpus.
+
+> [!NOTE]
+> Try to keep each PDF relatively small (less than 100MB) so that Honggfuzz can process them quickly.
+
+> [!NOTE]
+> What command would you use to download a PDF file from a URL?
+
+You can try running `pdftotext` on one of these files in the example shown below. `pdftotext` converts PDF files to plain text.
+
+```shell
+install/bin/pdftotext pdf_examples/helloworld.pdf -
+```
+
 The first argument is the input PDF file, and the second argument is the output text file (`-` means output to stdout).
 It should output `Hello, world!` followed by a few blank lines.
+Try to find 2-3 more PDF files to add to the seed corpus and test them with `pdftotext`.
 
 > [!NOTE]
 > What initial corpus size is ideal?
+
+> [!NOTE]
 > How big or small should the starting corpus be and how would this affect fuzzing outcomes?
 
 ### Dictionary
@@ -145,14 +125,13 @@ curl -LO 'https://github.com/AFLplusplus/AFLplusplus/raw/stable/dictionaries/pdf
 
 ### Fuzzing
 
-> [!IMPORTANT]
-> Before starting fuzzing, I would recommend plugging in your laptop.
-> Fuzzing is very intense and most laptops can draw more power when they are plugged in.
-> The more power your computer draws, the faster your computer will be.
-> The faster your computer, the faster your fuzzer will find interesting inputs!
-
 Here's the fun part!
-To start fuzzing, run `honggfuzz -i pdf_examples -o corpus -w pdf.dict -- install/bin/pdftotext ___FILE___ /dev/null`.
+To start fuzzing, run the following command.
+
+```shell
+honggfuzz -i pdf_examples -o corpus -w pdf.dict -- install/bin/pdftotext ___FILE___ /dev/null
+```
+
 We give Honggfuzz the `pdf_examples` directory as the initial input corpus and tell it to store new interesting inputs in the `corpus` directory.
 We also provide the dictionary with `-w pdf.dict`.
 After the `--`, we specify the program to be fuzzed along with its arguments.
@@ -169,12 +148,22 @@ If the fuzzer isn't finding new inputs or the speed is below 100, then something
 
 > [!NOTE]
 > How long did it take your computer to find the crash?
+
+> [!NOTE]
 > How long did it take the people around you?
+
+> [!NOTE]
 > Compare how long it took and try to come up with an explanation.
 
-Now run `ls` and you should see a file named something like `SIGSEGV.PC.57605a.STACK.1976259487.CODE.1.ADDR.7fff4d888ff8.INSTR.call___0xffffffffffe904c6.fuzz`.
-This contains the input that caused the crash.
-There should also be a file named `HONGGFUZZ.REPORT.TXT`, and you can print it out by running `cat HONGGFUZZ.REPORT.TXT`.
+## Triaging the Crash
+
+After Honggfuzz finds a crash, you can find the input that caused the crash in your current directory. If you run `ls` and you should see a file named something like `SIGSEGV.PC.57605a.STACK.1976259487.CODE.1.ADDR.7fff4d888ff8.INSTR.call___0xffffffffffe904c6.fuzz`. This contains the input that caused the crash.
+There should also be a file named `HONGGFUZZ.REPORT.TXT`, and you can print it out by running the following command
+
+```shell
+cat HONGGFUZZ.REPORT.TXT
+```
+
 This file contains some details of the crash, including the backtrace which is the list of function calls that lead to the crash.
 You'll see a few lines repeating over and over again because the crash was due to infinite recursion.
 If you were investigating a new bug that you just found, the next step would be to figure out the root cause using tools like GDB.
@@ -183,4 +172,9 @@ That requires a lot more knowledge that we don't have time to cover and being fa
 > [!NOTE]
 > That file name `SIGSEGV.PC.57605a.STACK.1976259487.CODE.1.ADDR.7fff4d888ff8.INSTR.call___0xffffffffffe904c6.fuzz` is very long and has many words.
 > What do each of those words/numbers mean and refer to?
+
+> [!NOTE]
 > Can you get any information on the crash from the name?
+
+> [!NOTE]
+> If you want to try and replicate the crash, how would you do it?
