@@ -135,7 +135,7 @@ It should output `Hello, world!` followed by a few blank lines.
 ### Dictionary
 
 Another way that we can help Honggfuzz is use a dictionary, which is a list of common byte sequences for the file format that we're fuzzing.
-Honggfuzz will try inserting these sequences into the input data and it will have a higher change of creating partially-valid files that trigger new behavior in our target.
+Honggfuzz will try inserting these sequences into the input data and it will have a higher chance of creating partially-valid files that trigger new behavior in our target.
 We'll use a PDF dictionary from AFL++, another popular fuzzer.
 Download it with this command:
 
