@@ -30,7 +30,21 @@ To fuzz effectively, the fuzzer needs a way to monitor the execution of the targ
 We will compile the target with a special compiler which inserts instrumentation code that allows Honggfuzz to track code coverage.
 Honggfuzz can also monitor the target using hardware features on some CPUs or the QEMU emulator.
 
-After connecting to the server, download the Xpdf source code using the `curl` utiliy by running the following.
+After connecting to the server, we will start by setting up our fuzzing directory.
+Create a directory to hold the fuzzing and move into it.
+
+```shell
+mkdir xpdf/
+cd xpdf/
+```
+
+You can verify that you are in the correct directory by running `pwd` which will print the current working directory.
+
+```shell
+pwd
+```
+
+Next, download the Xpdf source code using the `curl` utiliy by running the following.
 The downloaded file is a tar archive compressed using gzip which you can extract using `tar`.
 
 ```shell
@@ -52,11 +66,11 @@ First, generate a Makefile containing the commands that need to be executed in o
 This is done by running the `configure` script shown below.
 
 ```shell
-CC=hfuzz-clang CXX=hfuzz-clang++ ./configure --prefix=/fuzz/install
+CC=hfuzz-clang CXX=hfuzz-clang++ ./configure --prefix=$HOME/xpdf/install
 ```
 
 `CC=hfuzz-clang CXX=hfuzz-clang++` sets the C and C++ compilers to the Honggfuzz compilers which will instrument the program.
-The `--prefix` option sets the directory where Xpdf will be installed after it is built. Next, run `make -j <num_cores>` where `<num_cores>` is the number of CPU cores on your computer, which you can determine by running the `nproc` command.
+The `--prefix` option sets the directory where Xpdf will be installed after it is built. Next, run `make -j <num_cores>` where `<num_cores>` is the number of CPU cores on the server, which you can determine by running the `nproc` command.
 This will compile Xpdf by executing the commands in the Makefile.
 
 ```make
@@ -147,7 +161,7 @@ After the `--`, we specify the program to be fuzzed along with its arguments.
 `___FILE___` is a placeholder which Honggfuzz will replace with the name of the input file, and we make the program output to `/dev/null`, which is a special file that discards anything written to it.
 
 You should now see a fancy status panel.
-Depending on your luck and how powerful your computer is, it may take anywhere from a few seconds to tens of minutes for Honggfuzz to find a crash.
+Depending on your luck and how powerful the server is, it may take anywhere from a few seconds to tens of minutes for Honggfuzz to find a crash.
 Once Honggfuzz finds a crash, you can stop the fuzzing with CTRL-C.
 You can also use the `--exit_upon_crash` flag to have Honggfuzz automatically stop when it finds a crash.
 If you use this flag, you have to put it before the `--`, otherwise Honggfuzz will think that the flag is for the target program.
@@ -173,6 +187,12 @@ There should also be a file named `HONGGFUZZ.REPORT.TXT`, and you can print it o
 
 ```shell
 cat HONGGFUZZ.REPORT.TXT
+```
+
+Alternatively, you can open it up in VSCode by running the following command.
+
+```shell
+code HONGGFUZZ.REPORT.TXT
 ```
 
 This file contains some details of the crash, including the backtrace which is the list of function calls that lead to the crash.
