@@ -25,6 +25,7 @@ Your public key will be stored in a file named `id_ed25519.pub` and your private
 Submit this [form](https://docs.google.com/forms/d/e/1FAIpQLSc9rahtsB0_MOjaj53k9oTJRdC5wd2gsMypsINK3N8EAguQ2g/viewform?usp=sf_link) with your **public** key so that we can give you access to the server.
 The private key is used to prove that you own the public key and you should keep it secret.
 Once I tell you that I've added your key to the server, you should be able to connect by running `ssh <username>@fuzz.acmcyber.com`.
+For example, if your username is `alex`, you would run `ssh alex@fuzz.acmcyber.com`.
 
 ## VS Code
 
