@@ -1,5 +1,5 @@
 # Fuzzing Lab
-This is the repository the Introduction to Fuzzing Lab run by [ACM Cyber at UCLA](https://www.acmcyber.com/).
+This is the repository for the Introduction to Fuzzing Lab run by [ACM Cyber at UCLA](https://www.acmcyber.com/).
 Some parts were inspired by [Fuzzing101](https://github.com/antonio-morales/Fuzzing101).
 
 | **Week** | **Topic** | **Slides** | **Lab** |
