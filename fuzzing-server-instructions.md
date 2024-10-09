@@ -26,6 +26,10 @@ Submit this [form](https://docs.google.com/forms/d/e/1FAIpQLSc9rahtsB0_MOjaj53k9
 The private key is used to prove that you own the public key and you should keep it secret.
 Once I tell you that I've added your key to the server, you should be able to connect by running `ssh <username>@fuzz.acmcyber.com`.
 For example, if your username is `alex`, you would run `ssh alex@fuzz.acmcyber.com`.
+When you do this for the first time, you will be asked to verify the server's host key.
+Check that the displayed key fingerprint matches `SHA256:o13vb+5oIxm+EI9YBqBg6QZ7j1Cek5fOp1uulS34ucY` and then type `yes`.
+If everything worked, you should see a green shell prompt that looks like `<username>@fuzzpwn:~$`.
+Type `exit` to disconnect from the server.
 
 ## VS Code
 
