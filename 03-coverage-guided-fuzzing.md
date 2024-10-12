@@ -10,59 +10,120 @@ A library can't be executed on its own, so we'll need to compile an executable p
 
 > [!NOTE]
 > This week's exercise will have less commands provided so you can get a chance to try and figure things out in preparation for the project!
-> If you forgot how to run a command or need an explanation on a fuzzing concept, you can refer back to [last week's exercise](02-intro-to-fuzzing.md).
+> If you forgot how to run a command or need an explanation on a fuzzing concept, you can try searching for information online, running `man <command_name>`, or running a command with the `--help` option, or refer back to [last week's exercise](02-intro-to-fuzzing.md).
 > Please ask for help if you're stuck, we're here to help!
 
-# Week 3: Fuzzing Libraries
+## Fuzzing Libexif
 
 In this exercise, we will rediscover a vulnerability in the [libexif](https://libexif.github.io/) library, which parses Exif image metadata.
 A library can't be executed on its own, so we'll need to compile an executable program that uses the library.
 One executable that we can use is the [exif](https://github.com/libexif/exif) tool provided by the libexif project.
-In later weeks we will show how to write your own executable to achieve much better performance.
-
-This time, we will not be giving you the exact commands to execute, so you'll have to figure them out yourselves.
-If you're not sure what to do, you can try reading documentation, which you can find by searching online, running `man <command_name>`, or running a command with the `--help` option.
-You can refer back to [last week's exercise](week2.md).
+In later weeks, we will show how to write your own executable to achieve much better performance.
 
 ## Building libexif
 
-Inside the Docker container, download libexif from <https://github.com/libexif/libexif/archive/refs/tags/libexif-0_6_14-release.tar.gz> and extract the archive.
-Move into the resulting directory.
-Before compiling libexif, we need to install some of its dependencies.
-We can do this using Fedora's DNF package manager by running `dnf install libtool gettext-devel popt-devel`.
-libexif doesn't include a `configure` script inside its repository, so we have to generate one by running `autoreconf -fvi`.
-You can run `autoreconf --help` to see what the options do.
+On the server, create a new directory called `libexif/` in your home directory and change directory into it. This directory will be used to store the source code, build files for libexif, and other related files we will need for this exercise.
 
-Now is a good time to mention the difference between static linking and dynamic linking.
-These are the two ways in which an executable's code can be linked to the libraries that it uses.
-In static linking, the library's code is copied into the executable file at build time.
-On the other hand, dynamically linked libraries, also called shared libraries, are stored in separate files.
-When the program is executed, a dynamic linker finds the libraries and links the executable with them.
-Linux programs are usually dynamically linked, but when fuzzing we want to use static linking since we want to avoid having to mess with libary search paths in order to make the dynamic linker find the right libraries.
+```sh
+mkdir libexif
+cd libexif
+```
 
-Build and install libexif.
-When you run the `configure` script, add the `--enable-shared=no` option to disable the generation of shared library files.
-Remember to use the Honggfuzz compiler and set the install prefix.
+Once inside the directory, download libexif, extract the archive, and then move into the resulting directory.
+
+```sh
+curl -LO https://github.com/libexif/libexif/archive/refs/tags/libexif-0_6_14-release.tar.gz
+gzip -d libexif-0_6_14-release.tar.gz
+cd libexif-0_6_14-release/
+```
+
+Unlike xpdf from last week, libexif doesn't include a `configure` script inside its repository, so we have to generate one by using a program called `autoconf`. You can run `autoreconf --help` to see what the options do.
+
+```sh
+autoreconf -fvi
+```
+
+Next, here is the first command you will try figuring out yourself.
+Your goal is to build and install libexif.
+
+> [!NOTE]
+> What is the command you need to generate the build files for libexif?
+> Remember to use the Honggfuzz compiler and set the install prefix.
+> You will also need to add the `--enable-shared=no` option to disable the generation of shared library files.
+> Hint: It uses the `configure` script.
+
+> [!NOTE]
+> What is the command you need to run to build libexif?
+
+> [!NOTE]
+> What is the command you need to run to install libexif?
+
+After you have successfully built and installed libexif, you should see a few files created inside the `$HOME/libexif/install/lib/` directory.
 
 ## Building exif
 
-Go back to the `/fuzz` directory.
-Download the exif source code from <https://github.com/libexif/exif/archive/refs/tags/exif-0_6_15-release.tar.gz> and extract the archive, then build and install exif.
-When running the `configure` script, add `PKG_CONFIG_PATH=/fuzz/install/lib/pkgconfig` to the end.
-This option helps the build system find the libexif libary that we just installed.
+After we build libexif, we now need to build the `exif` program that uses the libexif library.
+This will act as a target program for our fuzzer so we can find vulnerabilities in the library.
 
-Return to the `/fuzz` directory once again.
-If you try running the `exif` program that you just built, you should see a help message.
+Navigate back to your `libexif/` directory and download the exif source code. Make sure to extract the archive and move into the resulting directory.
 
-## Fuzzing
+```sh
+cd ..
+curl -LO https://github.com/libexif/exif/archive/refs/tags/exif-0_6_15-release.tar.gz
+tar -xzvf exif-0_6_15-release.tar.gz
+cd exif-exif-0_6_15-release/
+```
 
-For our seed corpus, download some samples of images with Exif metadata from <https://github.com/ianare/exif-samples/archive/refs/heads/master.zip> and extract the archive using `unzip master.zip`.
+Now, you will need to run the `configure` script to generate the build files for the `exif` program.
+You will need to add an option to the `configure` script to help it find the libexif library that we just installed.
+
+> [!NOTE]
+> What is the command you need to run to generate the build files for the `exif` program?
+> You will need to add `PKG_CONFIG_PATH=install/lib/pkgconfig` to the end of the command.
+> Remember to use the Honggfuzz compiler and set the install prefix.
+
+> [!NOTE]
+> What is the command you need to run to build the `exif` program?
+
+> [!NOTE]
+> What is the command you need to run to install the `exif` program?
+
+After you have successfully built and installed the `exif` program, return to the `libexif/` directory and run the `exif` program.
+You should a help message printed out by the following command.
+
+```sh
+install/bin/exif
+```
+
+## Fuzzing exif
+
+For our seed corpus, download some samples of images with Exif metadata and extract them.
+
+```sh
+curl -LO https://github.com/ianare/exif-samples/archive/refs/heads/master.zip
+unzip master.zip
+```
+
 Try running `exif` on one of the images in the resulting directory.
 It should print out information about the image.
+
+```sh
+install/bin/exif exif-samples-master/jpg/Canon_40D.jpg
+```
+
 Now run Honggfuzz using the files in the `exif-samples-master/jpg` directory as the seed corpus.
 The only argument to the target program should be the input file generated by the fuzzer.
 You should get a crash after a while, but it may take up to half an hour.
-After you get the crash, you can examine `HONGGFUZZ.REPORT.TXT` and try to debug it if you want.
+
+> [!NOTE]
+> What is the Honggfuzz command you need to run to fuzz the `exif` program?
+> If you don't remember how to run Honggfuzz, check out [last week's exercise](02-intro-to-fuzzing.md) or ask for help.
+
+After you get the crash, you can examine `HONGGFUZZ.REPORT.TXT` and try to understand what caused the crash.
+See if you can try and replicate the crash using the `exif` program and test case found by Honggfuzz.
+
+> [!NOTE]
+> What is the command you used to replicate the crash?
 
 ## Acknowledgements
 This exercise is based on [Fuzzing101 Exercise 2](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%202).
