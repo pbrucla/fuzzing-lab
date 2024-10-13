@@ -117,6 +117,7 @@ You should get a crash after a while, but it may take up to half an hour.
 
 > [!NOTE]
 > What is the Honggfuzz command you need to run to fuzz the `exif` program?
+> Hint: A quick warning is that Honggfuzz's `___FILE___` has **three** underscores on each side (commonly mistaken for two).
 > If you don't remember how to run Honggfuzz, check out [last week's exercise](02-intro-to-fuzzing.md) or ask for help.
 
 After you get the crash, you can examine `HONGGFUZZ.REPORT.TXT` and try to understand what caused the crash.
