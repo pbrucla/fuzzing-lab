@@ -4,7 +4,7 @@ This is the repository for the Introduction to Fuzzing Lab run by [ACM Cyber at 
 | **Week** | **Topic** | **Slides** | **Lab** |
 |----------|-----------|------------|---------|
 | Week 2 | Intro to Fuzzing | [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](02-intro-to-fuzzing.md) |
-| Week 3 | Coverage-Guided Fuzzing | Slides | [Fuzzing Libraries](03-coverage-guided-fuzzing.md) |
+| Week 3 | Coverage-Guided Fuzzing | [Slides](https://docs.google.com/presentation/d/1vq2N1pAApM6_64zXXM5fall6amIIfagIOEdkZ_8SQgo/edit?usp=sharing) | [Fuzzing Libraries](03-coverage-guided-fuzzing.md) |
 
 Inspiration for some of parts of this was taken from [Fuzzing101](https://github.com/antonio-morales/Fuzzing101).
 
