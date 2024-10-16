@@ -3,9 +3,9 @@
 Fuzzing is a software testing technique that involves repeatedly executing a program with many randomized inputs.
 This quarter, we will dive into the world of fuzzing and learn how to use it to find bugs in software.
 We will be learning how to use [Honggfuzz](https://honggfuzz.dev), an easy-to-use, security-oriented fuzzer developed by Google which has found [many vulnerabilities](https://github.com/google/honggfuzz#trophies).
+You do not need to install Honggfuzz since all of the tools needed for this lab are already installed on the server for you!
 
 This week, we will be using Honggfuzz to rediscover an **infinite recursion denial-of-service vulnerability** in [Xpdf](https://www.xpdfreader.com), an open-source PDF reader.
-This exercise is based on [Fuzzing101 Exercise 1](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%201).
 
 **The best way to learn is by doing!**
 We recommend that you type out the commands in this exercise (except for URLs) instead of copying and pasting them, since this will help you remember them.
@@ -23,9 +23,7 @@ All of the exercises for this lab should be done on our fuzzing server.
 If you haven't done so already, follow the [instructions](fuzzing-server-instructions.md) to set up access to the server.
 Log into the server with SSH and run all of the commands for this lab on the server.
 
-## Fuzzing Xpdf
-
-### Instrumentation
+## Xpdf Instrumentation
 
 To fuzz effectively, the fuzzer needs a way to monitor the execution of the target program so that it knows which test cases generate interesting new behavior.
 We will compile the target with a special compiler which inserts instrumentation code that allows Honggfuzz to track which parts of the code is executed.
@@ -101,7 +99,7 @@ If you run `ls install/bin`, you should see several executables including `pdfto
 > Would the fuzzing work?
 > Would it be more efficient?
 
-### Building a Seed Corpus
+## Building a Seed Corpus
 
 To help Honggfuzz find interesting test cases, we will give it a few small examples of valid PDF files as part of the **seed corpus**.
 Create a directory to hold these files and move into it:
@@ -115,14 +113,14 @@ Search online for some small sample PDF files to include in the seed corpus.
 The files should be at most 100 KB so that they can be processed quickly.
 You can try search terms such as `pdf test files`.
 Once you find a PDF file, copy the URL and download it on the server with `curl`.
-For example, you can use this command to download a test PDF file from the Mozilla PDF.js project:
+For example, run the following command to download a test PDF file from the Mozilla PDF.js project:
 
 ```sh
 curl -LO 'https://github.com/mozilla/pdf.js-sample-files/raw/master/helloworld.pdf'
 ```
 
-Make sure you're using the direct URL to the PDF file, not the URL of a web page that contains or links to the PDF file.
-Once you've downloaded a several PDFs, use the `ls` command to print out their sizes and check that they are at most 100 KB:
+When you download a file, make sure you're using the direct URL to the PDF file, not the URL of a web page that contains or links to the PDF file.
+Once you've downloaded two to three more PDFs, use the `ls` command to print out their sizes and check that they are at most 100 KB:
 
 ```sh
 ls -lh
@@ -177,7 +175,7 @@ honggfuzz -i pdf_examples -o corpus -w pdf.dict --exit_upon_crash -- install/bin
 We give Honggfuzz the `pdf_examples` directory as the initial seed corpus and tell it to store new interesting test cases in the `corpus` directory.
 We also provide the dictionary with `-w pdf.dict`, and the `--exit_upon_crash` option tells Honggfuzz to automatically stop once it finds a test case that crashes the target program.
 The target program is specified after the `--`, and any arguments after that are forwarded to it.
-`___FILE___` is a placeholder which Honggfuzz will replace with the name of the file containing the test case.
+`___FILE___` is a placeholder which Honggfuzz will replace with the name of the file containing the test case (note that this has **three** underscores on each side of `FILE`, not two).
 We don't care about the output of `pdftotext`, so we make it output to `/dev/null`, a special file that discards any data written to it.
 
 You should now see a fancy status panel, and it should take at most a few minutes for Honggfuzz to find a crash.
@@ -221,3 +219,7 @@ This requires a lot more knowledge that we don't have time to cover and being fa
 
 > [!NOTE]
 > What would happen if you tried to open the test case file in a PDF viewer?
+
+## Acknowledgments
+
+This activity is based on [Fuzzing101 Exercise 1](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%201).
