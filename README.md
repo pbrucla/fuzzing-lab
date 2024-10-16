@@ -7,7 +7,7 @@ Some parts were inspired by [Fuzzing101](https://github.com/antonio-morales/Fuzz
 | Week 2 | Intro to Fuzzing | [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](02-intro-to-fuzzing.md) |
 
 # Project
-As part of Fuzzing Lab, you will get to participate in a quarter long project involving fuzzing **real-world software**.
+As part of Fuzzing Lab, you will get to participate in a quarter-long project where you will use the skills that you've learned to fuzz a new target of your choice.
 For more information about the project, check out the [project description](project.md).
 
 ## License
