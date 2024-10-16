@@ -35,8 +35,6 @@ As a more ambitious goal for your project, you can try fuzzing a target that has
 - tinyxml2: https://github.com/leethomason/tinyxml2
 - json-parser: https://github.com/json-parser/json-parser
 - jsonxx: https://github.com/hjiang/jsonxx
-- Yams: https://github.com/jpsim/Yams
-- csv-parser: https://github.com/vincentlaucsb/csv-parser
 - myhtml: https://github.com/lexborisov/myhtml
 - podofo: https://github.com/podofo/podofo
 
