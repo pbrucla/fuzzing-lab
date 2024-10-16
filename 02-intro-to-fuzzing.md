@@ -6,7 +6,6 @@ We will be learning how to use [Honggfuzz](https://honggfuzz.dev), an easy-to-us
 You do not need to install Honggfuzz since all of the tools needed for this lab are already installed on the server for you!
 
 This week, we will be using Honggfuzz to rediscover an **infinite recursion denial-of-service vulnerability** in [Xpdf](https://www.xpdfreader.com), an open-source PDF reader.
-This exercise is based on [Fuzzing101 Exercise 1](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%201).
 
 **The best way to learn is by doing!**
 We recommend that you type out the commands in this exercise (except for URLs) instead of copying and pasting them, since this will help you remember them.
@@ -222,3 +221,6 @@ This requires a lot more knowledge that we don't have time to cover and being fa
 
 > [!NOTE]
 > What would happen if you tried to open the test case file in a PDF viewer?
+
+## Acknowledgments
+This activity is based on [Fuzzing101 Exercise 1](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%201).
