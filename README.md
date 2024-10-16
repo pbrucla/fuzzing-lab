@@ -8,6 +8,10 @@ This is the repository for the Introduction to Fuzzing Lab run by [ACM Cyber at 
 
 Inspiration for some of parts of this was taken from [Fuzzing101](https://github.com/antonio-morales/Fuzzing101).
 
+# Project
+As part of Fuzzing Lab, you will get to participate in a quarter-long project where you will use the skills that you've learned to fuzz a new target of your choice.
+For more information about the project, check out the [project description](project.md).
+
 ## License
 The content in this repository is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
