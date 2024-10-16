@@ -11,6 +11,26 @@ A library can't be executed on its own, so we will also compile the [exif](https
 > If you forgot how to run a command or need an explanation of a fuzzing concept, you can try searching for information online, running `man <command_name>`, running a command with the `--help` option, or refering back to [last week's activity](02-intro-to-fuzzing.md).
 > Please ask for help if you're stuck, we're here to help!
 
+## Enabling AddressSanitizer
+
+As we've explained, AddressSanitizer can help us catch more bugs while fuzzing, at the cost of making the target slower.
+To enable it, set the `HFUZZ_CC_ASAN` environment variable like this:
+
+```sh
+export HFUZZ_CC_ASAN=1
+```
+
+This tells the Honggfuzz compiler to compile programs with AddressSanitizer.
+The environment variable is a property of your current shell session, so it will be gone when you close your terminal or log out of the server.
+Setting the environment variable in one terminal also won't affect other terminals that you have open.
+If you're not sure whether you have the environment variable set in your current terminal, you can run this command:
+
+```sh
+echo "$HFUZZ_CC_ASAN"
+```
+
+This will output `1` if it's set and nothing otherwise.
+
 ## Building libexif
 
 On the server, create a new directory called `libexif` in your home directory and move into it.
