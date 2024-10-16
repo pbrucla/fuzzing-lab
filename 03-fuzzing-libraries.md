@@ -123,4 +123,4 @@ Try to replicate the crash using the `exif` program and the test case found by H
 
 ## Acknowledgements
 
-This activity is based on [Fuzzing101 activity 2](https://github.com/antonio-morales/Fuzzing101/tree/main/activity%202).
+This activity is based on [Fuzzing101 Exercise 2](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%202).
