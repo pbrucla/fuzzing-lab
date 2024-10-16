@@ -1,31 +1,17 @@
 # Project
-As part of Fuzzing Lab, you will get to participate in a quarter long project involving fuzzing **real-world software**.
-Unlike the exercises, this project will involve you to apply the knowledge you learned on a target of your choice.
-For more information about the project requirements, please check out the [slides from the first week](README.md).
-There are three potential types of targets you can pick from which are listed below.
 
-Once you have decided on a group and team members, please fill out [this form](https://forms.gle/j8Qe5At51cmj1HfZ9) as part of the project proposal.
-We are aiming to form groups of roughly 2-3 members.
+As part of Fuzzing Lab, you will get to participate in a quarter-long project where you will use the skills that you've learned to fuzz a new target of your choice.
+For more information about the project requirements, please check out the [slides from the first week](https://l.acmcyber.com/fuzzing-lab-1).
+The three types of targets that you can pick from are listed below.
 
-## Option 1: Research a Known Vulnerability
-Honggfuzz has been used to find many vulnerabilities in the past.
-This project will involve learning more about how security researchers used Honggfuzz to find vulnerabilities based on known CVEs.
-You will be working on fuzzing targets on versions known to be vulnerable and trying to reproduce the CVE.
-The following is the list of preapproved targets:
+Once you have formed a group and chosen a target, please fill out [this form](https://forms.gle/j8Qe5At51cmj1HfZ9) as part of the project proposal.
+Your groups should have around two to three members.
 
-- libiptcdata: https://github.com/ianw/libiptcdata
-- libraw: https://github.com/LibRaw/LibRaw
-- libtiff: https://gitlab.com/libtiff/libtiff
+## Option 1: Fuzz for New Vulnerabilities
 
-The following involve standalone fuzzing if groups are interested in working on them:
-- htmldoc: https://github.com/michaelrsweet/htmldoc
-- md4c: https://github.com/mity/md4c
-- opendetex: https://github.com/pkubowicz/opendetex
-- xfig: https://github.com/hhoeflin/xfig
-- atasm: https://github.com/CycoPH/atasm
-
-## Option 2: Fuzz for New Vulnerabilities
-As a more ambitious goal for your project, you can try fuzzing a target that has **not** been fuzzed before. This project will involve researching an open-source software library or tool that has not been fuzzed before and working on setting up a fuzzing environment for it. With this project, you will delve more in depth to understanding how vulnerabilities are found in real-world software. A list of preapproved targets is below:
+For this option, your goal is to fuzz something that hasn't been fuzzed before, and you might find a new vulnerability if you're lucky.
+You will need to research an open-source library and write a fuzzing harness for it.
+Here's a list of targets that we recommend:
 
 - yaml-cpp: https://github.com/jbeder/yaml-cpp
 - libfyaml: https://github.com/pantoniou/libfyaml
@@ -38,7 +24,30 @@ As a more ambitious goal for your project, you can try fuzzing a target that has
 - myhtml: https://github.com/lexborisov/myhtml
 - podofo: https://github.com/podofo/podofo
 
+We've chosen targets that have probably not been fuzzed before, and aren't too hard to fuzz with the skills that you will learn in this lab.
+Please talk to us if you want to choose something not on this list.
+
+## Option 2: Research a Known Vulnerability
+
+Fuzzers have been used to find many vulnerabilities in the past.
+For this option, you will fuzz a version of the target that is known to have at least one vulnerability and your goal is to find a test case that reproduces a known vulnerability.
+Here's the list of targets for this option:
+
+- libiptcdata: https://github.com/ianw/libiptcdata
+- libraw: https://github.com/LibRaw/LibRaw
+- libtiff: https://gitlab.com/libtiff/libtiff
+
+Additionally, we have some targets that are standalone executables rather than libraries, so you won't need to write your own fuzzing harness.
+You can try to fuzz these if you want additional practice with the basic fuzzing concepts, but we strongly recommend that you choose something from the other lists since writing fuzzing harnesses is an important skill that we want you to learn.
+
+- htmldoc: https://github.com/michaelrsweet/htmldoc
+- md4c: https://github.com/mity/md4c
+- opendetex: https://github.com/pkubowicz/opendetex
+- xfig: https://github.com/hhoeflin/xfig
+- atasm: https://github.com/CycoPH/atasm
+
 ## Option 3: Propose Your Own Project
-Some groups may be interested in working on a project or target that is not listed above (for example, fuzzing with a different fuzzer besides Honggfuzz).
-We allow groups to work on whatever ideas that interest them but we want to ensure that the project is feasible so that each group has the best experience!
+
+Some groups may be interested in working on a project or target that is not listed above (for example, using a fuzzer other than Honggfuzz).
+We allow groups to work on other fuzzing-related projects, but we want to ensure that the project is feasible so that each group has the best experience!
 If you are interested in this option, **please contact an officer** to discuss your project idea before submitting the proposal form.
