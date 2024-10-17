@@ -129,6 +129,8 @@ Replicate the crash using the `exif` program and the test case found by Honggfuz
 > [!NOTE]
 > The AddressSanitizer report contains a lot of useful information that can be used to diagnose the bug.
 > Try reading the output and see if you can figure out what type of vulnerability AddressSanitizer detected.
+> Was the invalid memory access on the stack or the heap?
+> Was it a read operation or a write operation?
 
 ## Acknowledgements
 
