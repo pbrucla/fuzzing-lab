@@ -123,9 +123,12 @@ You can also look at [last week's activity](02-intro-to-fuzzing.md), but copying
 > [!NOTE]
 > Honggfuzz's `___FILE___` placeholder has **three** underscores on each side (commonly mistaken for two).
 
-You should get a crash after a while, but it may take up to half an hour.
 After you get the crash, you can examine `HONGGFUZZ.REPORT.TXT` and try to understand what caused the crash.
-Try to replicate the crash using the `exif` program and the test case found by Honggfuzz.
+Replicate the crash using the `exif` program and the test case found by Honggfuzz and you should see some colorful output from AddressSanitizer when it detects the bug.
+
+> [!NOTE]
+> The AddressSanitizer report contains a lot of useful information that can be used to diagnose the bug.
+> Try reading the output and see if you can figure out what type of vulnerability AddressSanitizer detected.
 
 ## Acknowledgements
 
