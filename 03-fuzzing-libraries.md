@@ -31,6 +31,12 @@ echo "$HFUZZ_CC_ASAN"
 
 This will output `1` if it's set and nothing otherwise.
 
+The memory leak detector in AddressSanitizer might report some leaks in `libexif` that aren't relevant to this activity, so disable it by running the following command:
+
+```sh
+export ASAN_OPTIONS=detect_leaks=0
+```
+
 ## Building libexif
 
 On the server, create a new directory called `libexif` in your home directory and move into it.
