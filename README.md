@@ -6,6 +6,7 @@ Click on one of the links below to get started!
 |----------|-----------|------------|---------|
 | Week 2 | Intro to Fuzzing | [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](02-intro-to-fuzzing.md) |
 | Week 3 | Fuzzing Libraries | [Slides](https://docs.google.com/presentation/d/1vq2N1pAApM6_64zXXM5fall6amIIfagIOEdkZ_8SQgo/edit?usp=sharing) | [Fuzzing Libraries](03-fuzzing-libraries.md) |
+| Week 4 | Writing Harnesses | [Slides](https://docs.google.com/presentation/d/1OM6O8aRyBaqIC0FoUJHPKUdYpwhn7LKDLArZfF7VOhA/edit?usp=sharing) | [Writing Harnesses](04-writing-harnesses.md) |
 
 # Project
 As part of Fuzzing Lab, you will get to participate in a quarter-long project where you will use the skills that you've learned to fuzz a new target of your choice.
