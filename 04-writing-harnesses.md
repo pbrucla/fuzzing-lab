@@ -140,7 +140,7 @@ You can run it with an input file as the argument, and the code inserted by the 
 
 ## Fuzzing
 
-Create a directory named `seed` where we'll store our seed corpus and run the following command to copy a test file from libcue into the directory.
+Create a directory named `seed` where we'll store our seed corpus and run the following command to copy a test file from libcue into the directory:
 
 ```sh
 cp libcue-2.2.1/t/issue10.cue seed
@@ -154,12 +154,6 @@ The speed should be tens of thousands of executions per second, and you should g
 
 If you have time, we encourage you to try to find the root cause of the crash using `gdb`.
 Note that there are some other bugs in this version of libcue; the one that caused the vulnerability is in a function named `track_set_index`.
-
-> [!NOTE]
-> How do you run your harness with `gdb`?
-
-> [!NOTE]
-> How do you pass the produced crash file to the harness while running it with `gdb`?
 
 > [!NOTE]
 > After reaching the crash in `gdb`, what does the output of `bt` (backtrace) show you?
