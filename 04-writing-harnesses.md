@@ -27,7 +27,7 @@ This is where the files generated during the build will be stored.
 Then run this command inside the `build` directory to generate the Makefile:
 
 ```sh
-CC=hfuzz-clang CXX=hfuzz-clang++ cmake -DCMAKE_INSTALL_PREFIX="$HOME/libcue/install" -DCMAKE_BUILD_TYPE=Release ..
+CC=hfuzz-clang CXX=hfuzz-clang++ cmake -DCMAKE_INSTALL_PREFIX="$HOME/fuzz-libcue/install" -DCMAKE_BUILD_TYPE=Release ..
 ```
 
 The `-DCMAKE_INSTALL_PREFIX="$HOME/fuzz-libcue/install"` option sets the installation directory like the `--prefix` option that we used previously.
