@@ -120,7 +120,7 @@ Make sure to also free the buffer where we copied the input using the [`free`](h
 Use this command to compile the harness:
 
 ```sh
-hfuzz-clang harness.c -o harness -Wall -Wextra -pedantic -O3 -fsanitize=fuzzer -I install/include -L install/lib64 -lcue
+hfuzz-clang harness.c -o harness -Wall -Wextra -pedantic -O3 -fsanitize=fuzzer -I install/include -L install/lib -lcue
 ```
 
 We run `hfuzz-clang` and give it our `harness.c` file.
@@ -131,7 +131,7 @@ Here's what all of the options do:
 * `-fsanitize=fuzzer` tells the compiler that we're using a libFuzzer-style harness.
   The compiler will automatically insert code that repeatedly reads input from the fuzzer and calls our `LLVMFuzzerTestOneInput` function.
 * `-I install/include` adds the directory with the libcue header files to the preprocessor's search path so that it can find `libcue.h`.
-* `-L install/lib64` adds the directory where the compiled libcue files are stored to the linker's search path so that the linker knows where to find the library.
+* `-L install/lib` adds the directory where the compiled libcue files are stored to the linker's search path so that the linker knows where to find the library.
 * `-lcue` tells the linker to link our harness with libcue.
   This option has to go after `harness.c` because of the way the linker loads the files.
 
