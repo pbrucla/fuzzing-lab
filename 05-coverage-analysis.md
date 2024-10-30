@@ -1,141 +1,172 @@
 # Week 5: Coverage Analysis
 
-In last week's activity, we wrote a custom harness to fuzz `libcue`. This activity will build upon that by showing you how to collect and analyze the **code coverage** achieved by the fuzzer.
+In last week's activity, we wrote a custom harness to fuzz `libcue`.
+This activity will build upon that by showing you how to collect and analyze the **code coverage** achieved by the fuzzer.
 
-Coverage tells us which parts of code in the target are actually executed upon running the target with certain test cases. While many fuzzers, including Honggfuzz, use some metric of coverage to guide their mutations, this coverage is not directly exposed to us for further analysis. 
+Coverage tells us which parts of code in the target are actually executed upon running the target with certain test cases.
+While many fuzzers, including Honggfuzz, use some metric of coverage to guide their mutations, this coverage is not directly exposed to us for further analysis. 
 
 We will be using LLVM's [SanitizerCoverage](https://clang.llvm.org/docs/SanitizerCoverage.html) interface and associated tooling to collect and view the coverage of our fuzzing corpus.
 
-## Rebuilding libcue and harness
+## Rebuilding libcue and the harness
 
-We will need to rebuild `libcue` and the harness with coverage instrumentation enabled. I recommend creating a new directory under your home directory called `cov-libcue` for this. The instructions are the same as in the activity from week 4 with the addition of `CFLAGS="-fprofile-instr-generate -fcoverage-mapping"` and changing `-DCMAKE_BUILD_TYPE=Release` to `-DCMAKE_BUILD_TYPE=Debug` when running CMake to generate the Makefile. 
+We will need to rebuild `libcue` and the harness with coverage instrumentation enabled.
+I recommend creating a new directory under your home directory called `cov-libcue` for this.
 
-`-fprofile-instr-generate` causes the compiler to insert profiling instructions into the generated code. Among other things, this will gather execution counts for blocks of code, thus enabling coverage analysis.
+Download libcue from <https://github.com/lipnitsk/libcue/archive/refs/tags/v2.3.0.tar.gz>.
+Last week, we fuzzed an old version of libcue that had a vulnerability, but this time we're using the latest version where the vulnerability has been fixed since we don't want crashes when we're trying to measure coverage.
 
-`-fcoverage-mapping` generates information to describe the mapping between the library's source code and the lower-level coverage instrumentation. This allows us to generate coverage reports that overlay execution counts with their associated ranges of source.
+We will build and install libcue using a similar process as last week, but we will use the `clang` compiler instead of `hfuzz-clang` since we don't want the Honggfuzz instrumentation.
+To enable SanitizerCoverage, we'll have to add the compiler flags `-fprofile-instr-generate` and `-fcoverage-mapping`, which can be done by setting the `CFLAGS` environment variable when running CMake.
+We will also use a debug build instead of a release build by changing `-DCMAKE_BUILD_TYPE=Release` to `-DCMAKE_BUILD_TYPE=Debug`.
+This disables optimizations which might make the compiled code not directly correspond to the source code.
+Here's the new CMake command:
 
-Using the Debug build type prevents optimizations which can reduce the quality of our coverage to source mapping. You will also need to recompile your harness with the two flags described above.
+```sh
+CC=clang CFLAGS='-fprofile-instr-generate -fcoverage-mapping' cmake -DCMAKE_INSTALL_PREFIX="$HOME/cov-libcue/install" -DCMAKE_BUILD_TYPE=Debug ..
+```
 
-## Refuzzing
+> [!NOTE]
+> You might have noticed that we didn't set the `CXX` environment variable this time.
+> `CC` sets the C compiler, while `CXX` sets the C++ compiler.
+> Similarly, `CFLAGS` sets the C compiler flags and `CXXFLAGS` sets the C++ compiler flags.
+> Since libcue is written in C, we only have to set `CC` and `CFLAGS`.
+> For C++ projects, you should set `CXX` and `CXXFLAGS` instead.
+> If the project uses both C and C++ or you're not sure, then you can set the environment variables for both languages like what we've been doing previously.
 
-We will need a corpus to analyze coverage from. While you could use your corpus from the previous activity, I recommend fuzzing again for a longer period to generate a larger corpus.
+Remember to create a build directory before running CMake.
+After running CMake, use `make` to build and install libcue like we did previously.
 
-This can be achieved by replacing the `--exit_upon_crash` option with `--run_time 60` which tells Honggfuzz to stop fuzzing after 60 seconds. Feel free to experiment with how different fuzzing times affect the coverage of the corpus.
+Last week we compiled our harness with `hfuzz-clang`, which provided code that calls the `LLVMFuzzerTestOneInput` function.
+This week we're using `clang` without the Honggfuzz wrapper, so we'll need to have our own code that reads input from files and passes the data to our harness.
+We'll call this code the "executor" and we can use the following implementation from the [Trail of Bits Testing Handbook](https://appsec.guide/docs/fuzzing/c-cpp/techniques/coverage-analysis/):
 
-## Collecting coverage
-
-We need a custom program, let's call it an executor, to execute all entries in our corpus.
-This program should read in a directory or list of files and execute each one with the
-`LLVMFuzzerTestOneInput` function from our harness.
-Feel free to write this on your own, but the source for a working executor is also provided below.
 ```c
+#include <dirent.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <dirent.h>
 #include <string.h>
-#include <stdint.h>
 
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
 
 void load_file_and_test(const char *filename) {
-    FILE *file = fopen(filename, "rb");
-    if (file == NULL) {
-        printf("Failed to open file: %s\n", filename);
-        return;
-    }
+  FILE *file = fopen(filename, "rb");
+  if (file == NULL) {
+    printf("Failed to open file: %s\n", filename);
+    return;
+  }
 
-    fseek(file, 0, SEEK_END);
-    long filesize = ftell(file);
-    rewind(file);
+  fseek(file, 0, SEEK_END);
+  long filesize = ftell(file);
+  rewind(file);
 
-    uint8_t *buffer = malloc(filesize);
-    if (buffer == NULL) {
-        printf("Failed to allocate memory for file: %s\n", filename);
-        fclose(file);
-        return;
-    }
+  uint8_t *buffer = (uint8_t *)malloc(filesize);
+  if (buffer == NULL) {
+    printf("Failed to allocate memory for file: %s\n", filename);
+    fclose(file);
+    return;
+  }
 
-    long read_size = (long)fread(buffer, 1, filesize, file);
-    if (read_size != filesize) {
-        printf("Failed to read file: %s\n", filename);
-        free(buffer);
-        fclose(file);
-        return;
-    }
-
-    LLVMFuzzerTestOneInput(buffer, filesize);
-
+  long read_size = (long)fread(buffer, 1, filesize, file);
+  if (read_size != filesize) {
+    printf("Failed to read file: %s\n", filename);
     free(buffer);
     fclose(file);
+    return;
+  }
+
+  LLVMFuzzerTestOneInput(buffer, filesize);
+
+  free(buffer);
+  fclose(file);
 }
 
 int main(int argc, char **argv) {
-    if (argc != 2) {
-        printf("Usage: %s <directory>\n", argv[0]);
-        return 1;
-    }
+  if (argc != 2) {
+    printf("Usage: %s <directory>\n", argv[0]);
+    return 1;
+  }
 
-    DIR *dir = opendir(argv[1]);
-    if (dir == NULL) {
-        printf("Failed to open directory: %s\n", argv[1]);
-        return 1;
-    }
+  DIR *dir = opendir(argv[1]);
+  if (dir == NULL) {
+    printf("Failed to open directory: %s\n", argv[1]);
+    return 1;
+  }
 
-    struct dirent *entry;
-    while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_type == DT_REG) {
-            char filepath[1024];
-            snprintf(filepath, sizeof(filepath), "%s/%s", argv[1], entry->d_name);
-            load_file_and_test(filepath);
-        }
+  struct dirent *entry;
+  while ((entry = readdir(dir)) != NULL) {
+    if (entry->d_type == DT_REG) {
+      char filepath[1024];
+      snprintf(filepath, sizeof(filepath), "%s/%s", argv[1], entry->d_name);
+      load_file_and_test(filepath);
     }
+  }
 
-    closedir(dir);
-    return 0;
+  closedir(dir);
+  return 0;
 }
 ```
 
-We can compile our executor as follows.
+Copy the code into a file named `executor.c` in your `cov-libcue` directory, and also copy the `harness.c` file that you wrote last week into this directory.
+Compile the harness and executor with this command:
 
-```
-hfuzz-clang -fprofile-instr-generate -fcoverage-mapping harness.c executor.c -o executor -I install/include -L install/lib -lcue
-```
-
-The following command will generate the raw LLVM profile data from running with our corpus in `fuzz.profraw`.
-
-```
-LLVM_PROFILE_FILE=fuzz.profraw ./executor corpus 2>1 >/dev/null
+```sh
+clang -fprofile-instr-generate -fcoverage-mapping harness.c executor.c -o executor -I install/include -L install/lib -lcue
 ```
 
-We must now convert it to an indexed `.profdata` file using the following command.
+# Collecting coverage data
 
-```
-llvm-profdata merge -sparse fuzz.profraw -o fuzz.profdata
-```
+The program that we just compiled will automatically write coverage information to a file specified in the `LLVM_PROFILE_FILE` environment variable when we run it.
+The executor takes a single argument that specifies a directory and it will run our harness on all of the files in the directory.
+We can run it on the corpus from last week like this:
 
-With the profdata file and our `executor` binary, we can generate a coverage report with the following command.
-
-```
-llvm-cov report executor -instr-profile=fuzz.profdata -ignore-filename-regex="harness.c|executor.c"
+```sh
+LLVM_PROFILE_FILE=fuzz.profraw ./executor ../fuzz-libcue/corpus 2>/dev/null
 ```
 
-Note that we ignore the `harness.c` and `executor.c` files since we don't care about their coverage.
-This will output a high-level report detailing the coverage percentages for each source file. For more detailed output with source code overlay, we can run the following command. There will be a column to the left of the source code with a number denoting the amount of times that line of code was executed. Lines with counts of zero are highlighted in red to indicate they are not covered.
+The `2>/dev/null` at the end discards the output from libcue, since it prints a lot of error messages when it reads inputs that aren't valid CUE files.
 
+This should create a `fuzz.profraw` file containing the raw coverage profile data in your current directory.
+We must now convert it to an indexed `.profdata` file using the following command:
+
+```sh
+llvm-profdata merge fuzz.profraw -o fuzz.profdata
 ```
-llvm-cov show executor -instr-profile=fuzz.profdata -ignore-filename-regex="harness.c|executor.c"
+Now we'll generate an HTML report that will display the coverage data in a nice format.
+We've set up a web server so that you can view the HTML report in your browser without having to download it to your computer first.
+The web server will look for files to serve in the `public_html` directory inside your home directory.
+Create this directory with the following command:
+
+```sh
+mkdir ~/public_html
 ```
 
-You can also add the absolute path of one of the source files at the end of the above command to show output for just that file. Viewing this detailed information in the command-line is not ideal, so we can generate an HTML based report using [LCOV](https://github.com/linux-test-project/lcov).
+Then generate the report inside the directory:
 
-```
-mkdir -p ~/public_html/report
-llvm-cov export executor -instr-profile=fuzz.profdata -format=lcov >fuzz.lcov
-genhtml --output-directory ~/public_html/report fuzz.lcov
+```sh
+llvm-cov show executor -instr-profile=fuzz.profdata -format=html -output-dir ~/public_html/libcue-report
 ```
 
-We have set up a web server that exposes files under `$HOME/public_html` for all users. Visit `fuzz.acmcyber.com/~username` where `username` is your username on the fuzzing server to view these files.
-You can click on the report directory and interact with the website to view high-level coverage details and source overlays.
+Note that we have to provide both the executor program and the coverage data file.
+
+Change the file permissions of the report so that the web server can read it:
+
+```sh
+chmod -R +rX ~/public_html/libcue-report
+```
+
+In your web browser, visit `https://fuzz.acmcyber.com/~username/libcue-report` where `username` is your username on the fuzzing server.
+You should see a page listing the source files and the coverage statistics of each file.
+You can click on a file name to see the coverage data for each line.
+In the line-by-line coverage report, the column between the line numbers and the code shows how many times each line was executed.
+
+> [!NOTE]
+> What do the red highlights show in the line-by-line coverage report?
+> Why do some lines not have execution counts?
+> Which parts of the code were never executed?
+> Why is this the case?
 
 ## Acknowledgements
-This activity is based on [this coverage analysis post from Trail of Bits](https://appsec.guide/docs/fuzzing/c-cpp/techniques/coverage-analysis/).
+
+This activity is based on [the Coverage Analysis page from the Trail of Bits Testing Handbook](https://appsec.guide/docs/fuzzing/c-cpp/techniques/coverage-analysis/).
