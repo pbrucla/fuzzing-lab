@@ -61,7 +61,7 @@ void load_file_and_test(const char *filename) {
   long filesize = ftell(file);
   rewind(file);
 
-  uint8_t *buffer = (uint8_t *)malloc(filesize);
+  uint8_t *buffer = malloc(filesize);
   if (buffer == NULL) {
     printf("Failed to allocate memory for file: %s\n", filename);
     fclose(file);
