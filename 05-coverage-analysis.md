@@ -115,7 +115,7 @@ Compile the harness and executor with this command:
 clang -fprofile-instr-generate -fcoverage-mapping harness.c executor.c -o executor -I install/include -L install/lib -lcue
 ```
 
-# Collecting coverage data
+## Collecting coverage data
 
 The program that we just compiled will automatically write coverage information to a file specified in the `LLVM_PROFILE_FILE` environment variable when we run it.
 The executor takes a single argument that specifies a directory and it will run our harness on all of the files in the directory.
