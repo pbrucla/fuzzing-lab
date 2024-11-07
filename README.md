@@ -8,6 +8,7 @@ Click on one of the links below to get started!
 | Week 3 | Fuzzing Libraries | [Slides](https://docs.google.com/presentation/d/1vq2N1pAApM6_64zXXM5fall6amIIfagIOEdkZ_8SQgo/edit?usp=sharing) | [Fuzzing Libraries](03-fuzzing-libraries.md) |
 | Week 4 | Writing Harnesses | [Slides](https://docs.google.com/presentation/d/1OM6O8aRyBaqIC0FoUJHPKUdYpwhn7LKDLArZfF7VOhA/edit?usp=sharing) | [Writing Harnesses](04-writing-harnesses.md) |
 | Week 5 | Coverage Analysis | [Slides](https://docs.google.com/presentation/d/1PhC4wibrJ1xZpgzF7RMtTg6ITrfjRuuOX5DQ6_LCgDY/edit?usp=sharing) | [Coverage Analysis](05-coverage-analysis.md) |
+| Week 6 | Structure-Aware Fuzzing | [Slides](https://docs.google.com/presentation/d/1sYVQbJrwiJvH3bfpS9J_Xu26YWBw6agfSDWhVbhJoiQ/edit?usp=sharing) | Work on Project |
 
 ## Project
 As part of Fuzzing Lab, you will get to participate in a quarter-long project where you will use the skills that you've learned to fuzz a new target of your choice.
