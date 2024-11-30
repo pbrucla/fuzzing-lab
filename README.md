@@ -1,4 +1,8 @@
 # Fuzzing Lab
+<p align="center">
+  <img width="653" alt="Screenshot 2024-11-29 at 7 05 13 PM" src="https://github.com/user-attachments/assets/bbc269f2-0925-4e62-b025-6fd6d22f967f">
+</p>
+
 This is the repository for the Introduction to Fuzzing Lab run by [ACM Cyber at UCLA](https://www.acmcyber.com/).
 Click on one of the links below to get started!
 
