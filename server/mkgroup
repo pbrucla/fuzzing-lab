@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+name="$1"
+members="$2"
+proj_dir="/projects/$name"
+
+groupadd -U "$members" -- "$name"
+mkdir -m 2770 "$proj_dir"
+chgrp -- "$name" "$proj_dir"
+setfacl -d -m g::rwX -- "$proj_dir"
