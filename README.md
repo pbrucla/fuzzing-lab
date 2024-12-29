@@ -18,6 +18,8 @@ Click on one of the links below to get started!
 | Week 9 | Break for Thanksgiving | - | - |
 | Week 10 | Present at Symposium | - | - |
 
+Interested to see what previous groups worked on? Check out our [blog post](https://www.acmcyber.com/blog/2024-12-03-fall-2024-fuzzing-lab).
+
 ## Project
 As part of Fuzzing Lab, you will get to participate in a quarter-long project where you will use the skills that you've learned to fuzz a new target of your choice.
 For more information about the project, check out the [project description](project.md).
