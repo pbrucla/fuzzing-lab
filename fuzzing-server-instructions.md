@@ -22,12 +22,12 @@ To generate an SSH key, run `ssh-keygen -t ed25519` in a terminal (outside of WS
 When prompted for the location where the key will be saved, choose the default by pressing Enter.
 Your keys will be stored in the `.ssh` folder of your home directory, which is hidden by default on macOS and Linux.
 Your public key will be stored in a file named `id_ed25519.pub` and your private key will be in `id_ed25519`.
-Submit this [form](https://docs.google.com/forms/d/e/1FAIpQLSc9rahtsB0_MOjaj53k9oTJRdC5wd2gsMypsINK3N8EAguQ2g/viewform?usp=sf_link) with your **public** key so that we can give you access to the server.
-The private key is used to prove that you own the public key and you should keep it secret.
+Submit this [form](https://docs.google.com/forms/d/e/1FAIpQLSdVtqtiMw7SCQNT0RnXL6_nFFpwOru9NXmmRnc4TKemeEamfw/viewform?usp=dialog) with your **public** key so that we can give you access to the server.
+The private key is used to prove that you own the public key and you should keep it secret. 
 Once I tell you that I've added your key to the server, you should be able to connect by running `ssh <username>@fuzz.acmcyber.com`.
 For example, if your username is `alex`, you would run `ssh alex@fuzz.acmcyber.com`.
 When you do this for the first time, you will be asked to verify the server's host key.
-Check that the displayed key fingerprint matches `SHA256:o13vb+5oIxm+EI9YBqBg6QZ7j1Cek5fOp1uulS34ucY` and then type `yes`.
+Check that the displayed key fingerprint matches `SHA256:uU7Bln6gjDF48P2lKx3CZ7v87+XoyS9yeqqZV5DfO+U` and then type `yes`.
 If everything worked, you should see a green shell prompt that looks like `<username>@fuzzpwn:~$`.
 Type `exit` to disconnect from the server.
 

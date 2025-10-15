@@ -1,8 +1,9 @@
-# Week 2: Intro to Fuzzing
+# Week 3: Intro to Fuzzing
 
 Fuzzing is a software testing technique that involves repeatedly executing a program with many randomized inputs.
 This quarter, we will dive into the world of fuzzing and learn how to use it to find bugs in software.
 We will be learning how to use [Honggfuzz](https://honggfuzz.dev), an easy-to-use, security-oriented fuzzer developed by Google which has found [many vulnerabilities](https://github.com/google/honggfuzz#trophies).
+
 You do not need to install Honggfuzz since all of the tools needed for this lab are already installed on the server for you!
 
 This week, we will be using Honggfuzz to rediscover an **infinite recursion denial-of-service vulnerability** in [Xpdf](https://www.xpdfreader.com), an open-source PDF reader.

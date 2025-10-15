@@ -4,13 +4,14 @@ As part of Fuzzing Lab, you will get to participate in a quarter-long project wh
 For more information about the project requirements, please check out the [slides from the first week](https://l.acmcyber.com/fuzzing-lab-1).
 The three types of targets that you can pick from are listed below.
 
-Once you have formed a group and chosen a target, please fill out [this form](https://forms.gle/j8Qe5At51cmj1HfZ9) as part of the project proposal.
+Once you have formed a group and chosen a target, please fill out [this form](https://docs.google.com/forms/d/e/1FAIpQLSdN24b5kQ5cgnasV1EvQd1yIPIMUfihgSFXWqx8g0o7Jr-56A/viewform?usp=header) as part of the project proposal.
 Your groups should have around two to three members.
 
 ## Option 1: Fuzz for New Vulnerabilities
 
 For this option, your goal is to fuzz something that hasn't been fuzzed before, and you might find a new vulnerability if you're lucky.
-You will need to research an open-source library and write a fuzzing harness for it.
+You will need to research an open-source library and write a fuzzing harness for it. 
+
 Here's a list of targets that we recommend:
 
 - yaml-cpp: https://github.com/jbeder/yaml-cpp

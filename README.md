@@ -8,13 +8,12 @@ Click on one of the links below to get started!
 
 | **Week** | **Topic** | **Slides** | **Lab** |
 |----------|-----------|------------|---------|
-| Week 2 | Intro to Fuzzing | [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](02-intro-to-fuzzing.md) |
-| Week 3 | Fuzzing Libraries | [Slides](https://docs.google.com/presentation/d/1vq2N1pAApM6_64zXXM5fall6amIIfagIOEdkZ_8SQgo/edit?usp=sharing) | [Fuzzing Libraries](03-fuzzing-libraries.md) |
-| Week 4 | Writing Harnesses | [Slides](https://docs.google.com/presentation/d/1OM6O8aRyBaqIC0FoUJHPKUdYpwhn7LKDLArZfF7VOhA/edit?usp=sharing) | [Writing Harnesses](04-writing-harnesses.md) |
-| Week 5 | Coverage Analysis | [Slides](https://docs.google.com/presentation/d/1PhC4wibrJ1xZpgzF7RMtTg6ITrfjRuuOX5DQ6_LCgDY/edit?usp=sharing) | [Coverage Analysis](05-coverage-analysis.md) |
-| Week 6 | Structure-Aware Fuzzing | [Slides](https://docs.google.com/presentation/d/1sYVQbJrwiJvH3bfpS9J_Xu26YWBw6agfSDWhVbhJoiQ/edit?usp=sharing) | Work on Project |
-| Week 7 | Project Work | [Slides](https://docs.google.com/presentation/d/1XRRdNXXHEUfTTTEE4ozhfPIzaTXUSNnpU-ai-bpg99E/edit?usp=sharing) | Work on Project |
-| Week 8 | Wrapping Up | [Slides](https://docs.google.com/presentation/d/10VXDnbvUfAtXNlKXpqo9F5Gdn76IrxHOXgXxrSjV--8/edit?usp=sharing) | Work on Project |
+| Week 3 | Intro to Fuzzing | [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](03-intro-to-fuzzing.md) |
+| Week 4 | Fuzzing Libraries |  |  |
+| Week 5 | Writing Harnesses |  |  |
+| Week 6 | Coverage Analysis |  |  |
+| Week 7 | Project Work | - | Work on Project |
+| Week 8 | Wrapping Up | - | Work on Project |
 | Week 9 | Break for Thanksgiving | - | - |
 | Week 10 | Present at Symposium | - | - |
 
@@ -29,6 +28,9 @@ The content in this repository is licensed under [CC BY-SA 4.0](https://creative
 
 ## Acknowledgements
 
-The following members of ACM Cyber contributed to the development of this lab: Alex Zhang, Ronak Badhe, Benson Liu, and Enzo Saracen.
+The following members of ACM Cyber contributed to the development of this lab: Alex Zhang, Ronak Badhe, Benson Liu, and Enzo Saracen. 
+
+The Fall '25 iteration of the lab is run by Teong Seng Tan, Enzo Saracen and Ryan Chang. 
+
 For any questions or concerns, please reach out to us at [uclacyber@gmail.com](mailto:uclacyber@gmail.com).
 Some activities are based on exercises from [Fuzzing101](https://github.com/antonio-morales/Fuzzing101).
