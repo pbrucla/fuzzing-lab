@@ -12,6 +12,8 @@ For Windows, go to *Settings > System > Optional Features* and install *OpenSSH 
 You can also use the SSH client in WSL or PuTTY if you want, but if you use PuTTY you'll need to follow different steps to generate a key.
 If you want to use VS Code installed locally instead of in your browser, you have to use the Windows OpenSSH client.
 
+If you have issues using SSH locally, you can use https://shell.cloud.google.com instead, a Linux machine in the cloud accessible via your browser.
+
 ## SSH keys
 
 We will use SSH keys to prove our identity to the server.
