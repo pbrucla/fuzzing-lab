@@ -25,6 +25,17 @@ List of targets recommended for Fall '24:
 - myhtml: https://github.com/lexborisov/myhtml
 - podofo: https://github.com/podofo/podofo
 
+New targets added for Fall '25 for consideration:
+
+- libxls: https://github.com/libxls/libxls
+- xlsxio: https://github.com/brechtsanders/xlsxio
+- pdfio: https://github.com/michaelrsweet/pdfio
+- yaml-cpp: https://github.com/jbeder/yaml-cpp
+- libcyaml: https://github.com/tlsa/libcyaml/
+- libpptx: https://github.com/iharob/libpptx
+- DuckX: https://github.com/amiremohamadi/DuckX
+- nghttp3: https://github.com/ngtcp2/nghttp3 (Harder, server fuzzing)
+
 We've chosen targets that have probably not been fuzzed before, and aren't too hard to fuzz with the skills that you will learn in this lab.
 Please talk to us if you want to choose something not on this list.
 
