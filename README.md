@@ -9,11 +9,11 @@ Click on one of the links below to get started!
 | **Week** | **Topic** | **Slides** | **Lab** |
 |----------|-----------|------------|---------|
 | Week 3 | Intro to Fuzzing | [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](03-intro-to-fuzzing.md) |
-| Week 4 | Fuzzing Libraries |  |  |
+| Week 4 | Fuzzing Libraries | [Slides](https://docs.google.com/presentation/d/1kuJAclmItb_yPY0epPPv6SWBVxcXidz3QFvNDMw5P1k/edit?usp=sharing) | [Fuzzing Libraries](04-fuzzing-libraries.md) |
 | Week 5 | Writing Harnesses |  |  |
 | Week 6 | Coverage Analysis |  |  |
 | Week 7 | Project Work | - | Work on Project |
-| Week 8 | Wrapping Up | - | Work on Project |
+| Week 8 | Wrapping Up | - | Work on Slides and Blog Post |
 | Week 9 | Break for Thanksgiving | - | - |
 | Week 10 | Present at Symposium | - | - |
 

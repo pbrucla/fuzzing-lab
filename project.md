@@ -12,7 +12,7 @@ Your groups should have around two to three members.
 For this option, your goal is to fuzz something that hasn't been fuzzed before, and you might find a new vulnerability if you're lucky.
 You will need to research an open-source library and write a fuzzing harness for it. 
 
-Here's a list of targets that we recommend:
+List of targets recommended for Fall '24:
 
 - yaml-cpp: https://github.com/jbeder/yaml-cpp
 - libfyaml: https://github.com/pantoniou/libfyaml
