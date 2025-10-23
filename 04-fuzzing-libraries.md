@@ -120,7 +120,7 @@ You don't need `-w` since we're not using a dictionary for this activity.
 For the options that take a value, it's up to you to figure out what value you need to pass.
 Recall that after the Honggfuzz options, you should put `--` followed by the target program and its arguments.
 If you don't remember what the Honggfuzz options do, run `honggfuzz --help`.
-You can also look at [last week's activity](02-intro-to-fuzzing.md), but copying the whole command won't be sufficient here.
+You can also look at [last week's activity](03-intro-to-fuzzing.md), but copying the whole command won't be sufficient here.
 
 > [!NOTE]
 > Honggfuzz's `___FILE___` placeholder has **three** underscores on each side (commonly mistaken for two).
@@ -135,5 +135,6 @@ Replicate the crash using the `exif` program and the test case found by Honggfuz
 > Was it a read operation or a write operation?
 
 ## Acknowledgements
+
 
 This activity is based on [Fuzzing101 Exercise 2](https://github.com/antonio-morales/Fuzzing101/tree/main/Exercise%202).
