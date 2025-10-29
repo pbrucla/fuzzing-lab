@@ -82,16 +82,14 @@ After we build libexif, we now need to build the `exif` program that uses the li
 This will act as a target program for our fuzzer so we can find vulnerabilities in the library.
 
 Download the exif source code from <https://github.com/libexif/exif/archive/refs/tags/exif-0_6_15-release.tar.gz>, extract the archive, and move into the resulting directory.
-Build and install exif using the same commands that you used for libexif, except that when you run the `configure` script, you will also need to figure out how to get the compiler to include the `$HOME/libexif/install/include/` directory.
+Build and install exif using the same commands that you used for libexif, except that when you run the `configure` script, you will also need to figure out how to get the compiler to include the `$HOME/libexif/install/include/` directory (hint: compiler flags).
 This tells the build system where to find the libexif library that you built and installed earlier.
 
 Return to the `libexif` directory and run the `exif` program that you just built:
 
 ```sh
-???/???/exif
+install/bin/exif --help
 ```
-
-Where is the `exif` executable? Find it within the `libexif` subdirectory that you created at the start by using the `find` command. 
 
 Running the executable should print a help message (and, if you compiled ASAN into it correctly, show some errors).
 
