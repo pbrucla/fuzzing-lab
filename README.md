@@ -10,10 +10,10 @@ Click on one of the links below to get started!
 |----------|-----------|------------|---------|
 | Week 3 | Intro to Fuzzing | [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](03-intro-to-fuzzing.md) |
 | Week 4 | Fuzzing Libraries | [Slides](https://docs.google.com/presentation/d/1kuJAclmItb_yPY0epPPv6SWBVxcXidz3QFvNDMw5P1k/edit?usp=sharing) | [Fuzzing Libraries](04-fuzzing-libraries.md) |
-| Week 5 | Writing Harnesses |  [Slides](https://docs.google.com/presentation/d/1lCbrMk0qqHFzJrBTTlxx0oVM6GTLVjPp11iBK4k8HtA/edit?usp=sharing) | [Writing Harnesses](05-writing-harnesses.md) |
-| Week 6 | Coverage Analysis |  |  |
-| Week 7 | Project Work | - | Work on Project |
-| Week 8 | Wrapping Up | - | Work on Slides and Blog Post |
+| Week 5 | Writing Harnesses | [Slides](https://docs.google.com/presentation/d/1lCbrMk0qqHFzJrBTTlxx0oVM6GTLVjPp11iBK4k8HtA/edit?usp=sharing) | [Writing Harnesses](05-writing-harnesses.md) |
+| Week 6 | Writing Harnesses (cont.) | - | Work on Project |
+| Week 7 | Coverage Analysis + Project Work | [Slides](https://docs.google.com/presentation/d/154v9GhiQtCdEfbySLGoRcYEKDfzRMqqz1n5kDiFntP0/edit?usp=sharing) | [Coverage Analysis](07-coverage-analysis.md) |
+| Week 8 | Wrapping Up | - | Work on Project, Slides and Blog Post |
 | Week 9 | Break for Thanksgiving | - | - |
 | Week 10 | Present at Symposium | - | - |
 
