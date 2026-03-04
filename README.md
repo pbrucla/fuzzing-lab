@@ -32,5 +32,5 @@ The following members of ACM Cyber contributed to the development of this lab: A
 
 The Fall '25 iteration of the lab is run by Teong Seng Tan, Enzo Saracen and Ryan Chang. 
 
-For any questions or concerns, please reach out to us at [uclacyber@gmail.com](mailto:uclacyber@gmail.com).
+For any questions or concerns, please reach out to us at [uclacyber+fuzzing@gmail.com](mailto:uclacyber+fuzzing@gmail.com).
 Some activities are based on exercises from [Fuzzing101](https://github.com/antonio-morales/Fuzzing101).
