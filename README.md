@@ -8,7 +8,7 @@ Click on one of the links below to get started!
 
 | **Week** | **Topic** | **Slides** | **Lab** |
 |----------|-----------|------------|---------|
-| Week 2 | Intro to Fuzzing & Agentss| [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](03-intro-to-fuzzing.md) |
+| Week 2 | Intro to Fuzzing & Agentss| [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](02-intro-to-fuzzing.md) |
 | Week 3 | - | - | - |
 | Week 4 | - | - | - |
 | Week 5 | - | - | - |

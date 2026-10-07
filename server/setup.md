@@ -19,7 +19,7 @@ Use the scripts in this directory to create unprivileged users for the lab membe
 
 ## AI Safety Server
 
-Run the 
+Run the `add_user.sh` script in /usr/local/sbin in `sullivan`.
 
 ## HTTP Server
 
