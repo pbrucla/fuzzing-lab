@@ -1,6 +1,6 @@
 # Fuzzing Server Instructions
 
-We will be using the AI safety server to perform our fuzzing, since there are GPUs on the server with which we can run a local Qwen3.8 model. 
+We will be using the AI safety server to perform our fuzzing, since there are GPUs on the server with which we can run a local Qwen3.8 model.
 It's similar to the SEASnet servers, but we will connect to it using keys instead of passwords.
 You can use VS Code to edit files on the server.
 
@@ -25,7 +25,7 @@ When prompted for the location where the key will be saved, choose the default b
 Your keys will be stored in the `.ssh` folder of your home directory, which is hidden by default on macOS and Linux.
 Your public key will be stored in a file named `id_ed25519.pub` and your private key will be in `id_ed25519`.
 Submit this [form](https://docs.google.com/forms/d/e/1FAIpQLSf5OSA7U8VZ4MtdvXCd-P6pGczuQ77rSg_MoeZQcTHnMQwiYQ/viewform) with your **public** key so that we can give you access to the server.
-The private key is used to prove that you own the public key and you should keep it secret. 
+The private key is used to prove that you own the public key and you should keep it secret.
 
 ## Editing your SSH Configuration
 
@@ -56,15 +56,14 @@ Host serrano
   User <USERNAME>
 ```
 
-Remember to replace `<USERNAME>` with actual username. 
-
-## Connecting to the UCLA VPN
-
-If you are not using the on-campus eduroam wifi, you will need to connect to the UCLA VPN. You can learn how to do this at [Campus VPN](https://dts.ucla.edu/products-services/software-downloads/virtual-private-network-vpn).
+Remember to replace `<USERNAME>` with actual username.
 
 ## Connecting to the AI Safety Server with SSH
 
-Once we tell you that we've added your user sto the server, you should be able to connect by running `ssh ynez`, `ssh temescal` or `ssh serrano` based on the server you want to connect to.
+> [!NOTE]
+> To access the AI safety servers, you will need to first connect to the UCLA VPN, even if you are using an on-campus wifi like eduroam. You can learn how to do this at [Campus VPN](https://dts.ucla.edu/products-services/software-downloads/virtual-private-network-vpn).
+
+Once we tell you that we've added your user to the server, you should be able to connect by running `ssh ynez`, `ssh temescal` or `ssh serrano` based on the server you want to connect to.
 
 > When you do this for the first time, you will be asked to verify the server's host key. You can ask us for the fingerprint if you're really concerned, otherwise just type `yes`.
 

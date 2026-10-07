@@ -8,7 +8,7 @@ Click on one of the links below to get started!
 
 | **Week** | **Topic** | **Slides** | **Lab** |
 |----------|-----------|------------|---------|
-| Week 2 | Intro to Fuzzing & Agentss| [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](02-intro-to-fuzzing.md) |
+| Week 2 | Intro to Fuzzing & Agents | [Slides](https://docs.google.com/presentation/d/1QS6PeITc5_jhTofA9yAa5zs9qMmfmyfHmtD1nX3y48A/edit?usp=sharing) | [Using Honggfuzz](02-intro-to-fuzzing.md) |
 | Week 3 | - | - | - |
 | Week 4 | - | - | - |
 | Week 5 | - | - | - |
@@ -27,9 +27,9 @@ The content in this repository is licensed under [CC BY-SA 4.0](https://creative
 
 ## Acknowledgements
 
-The following former members of ACM Cyber contributed to the development of this lab: Alex Zhang, Ronak Badhe, Benson Liu, and Enzo Saracen. 
+The following former members of ACM Cyber contributed to the development of this lab: Alex Zhang, Ronak Badhe, Benson Liu, and Enzo Saracen.
 
-The Fall '26 iteration of the lab is run by Teong Seng Tan and Nathan Cheng. 
+The Fall '26 iteration of the lab is run by Teong Seng Tan and Nathan Cheng.
 
 For any questions or concerns, please reach out to us at [uclacyber+fuzzing@gmail.com](mailto:uclacyber+fuzzing@gmail.com).
 Some activities are based on exercises from [Fuzzing101](https://github.com/antonio-morales/Fuzzing101).
