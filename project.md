@@ -1,6 +1,6 @@
 # Project
 
-As part of Fuzzing Lab, you will get to participate in a quarter-long project where you will use the skills that you've learned to fuzz a new target of your choice.
+As part of the Agentic Fuzzing Lab, you will get to participate in a quarter-long project where you will use the skills that you've learned to fuzz a new target of your choice.
 For more information about the project requirements, please check out the [slides from the first week](https://l.acmcyber.com/fuzzing-lab-1).
 The three types of targets that you can pick from are listed below.
 
@@ -12,7 +12,22 @@ Your groups should have around two to three members.
 For this option, your goal is to fuzz something that hasn't been fuzzed before, and you might find a new vulnerability if you're lucky.
 You will need to research an open-source library and write a fuzzing harness for it. 
 
-List of targets recommended for Fall '24:
+Fuzzing targets for Fall '26:
+
+- TODO
+
+Fuzzing targets for Fall '25:
+
+- libxls: https://github.com/libxls/libxls
+- xlsxio: https://github.com/brechtsanders/xlsxio
+- pdfio: https://github.com/michaelrsweet/pdfio
+- yaml-cpp: https://github.com/jbeder/yaml-cpp
+- libcyaml: https://github.com/tlsa/libcyaml/
+- libpptx: https://github.com/iharob/libpptx
+- DuckX: https://github.com/amiremohamadi/DuckX
+- nghttp3: https://github.com/ngtcp2/nghttp3 (Harder, server fuzzing)
+
+Fuzzing targets for Fall '24:
 
 - yaml-cpp: https://github.com/jbeder/yaml-cpp
 - libfyaml: https://github.com/pantoniou/libfyaml
@@ -24,17 +39,6 @@ List of targets recommended for Fall '24:
 - jsonxx: https://github.com/hjiang/jsonxx
 - myhtml: https://github.com/lexborisov/myhtml
 - podofo: https://github.com/podofo/podofo
-
-New targets added for Fall '25 for consideration:
-
-- libxls: https://github.com/libxls/libxls
-- xlsxio: https://github.com/brechtsanders/xlsxio
-- pdfio: https://github.com/michaelrsweet/pdfio
-- yaml-cpp: https://github.com/jbeder/yaml-cpp
-- libcyaml: https://github.com/tlsa/libcyaml/
-- libpptx: https://github.com/iharob/libpptx
-- DuckX: https://github.com/amiremohamadi/DuckX
-- nghttp3: https://github.com/ngtcp2/nghttp3 (Harder, server fuzzing)
 
 We've chosen targets that have probably not been fuzzed before, and aren't too hard to fuzz with the skills that you will learn in this lab.
 Please talk to us if you want to choose something not on this list.

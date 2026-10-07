@@ -17,6 +17,10 @@ Add admin SSH keys to the box or the project configuration.
 The comment fields of the keys will be used as the username on the box.
 Use the scripts in this directory to create unprivileged users for the lab members.
 
+## AI Safety Server
+
+Run the 
+
 ## HTTP Server
 
 Install Apache and setup the userdir module.

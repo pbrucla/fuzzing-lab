@@ -1,4 +1,4 @@
-# Week 3: Intro to Fuzzing
+# Week 2: Intro to Fuzzing
 
 Fuzzing is a software testing technique that involves repeatedly executing a program with many randomized inputs.
 This quarter, we will dive into the world of fuzzing and learn how to use it to find bugs in software.
@@ -20,7 +20,7 @@ If you have any questions, feel free to ask one of the officers running the lab.
 
 ## Setup
 
-All of the exercises for this lab should be done on our fuzzing server.
+All of the exercises for this lab should be done on the AI safety server.
 If you haven't done so already, follow the [instructions](fuzzing-server-instructions.md) to set up access to the server.
 Log into the server with SSH and run all of the commands for this lab on the server.
 
